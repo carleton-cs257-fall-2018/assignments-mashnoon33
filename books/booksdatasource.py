@@ -52,7 +52,7 @@ class BooksDataSource:
                 books: ID,title,publication-year
                   e.g. 6,Good Omens,1990
                        41,Middlemarch,1871
-                    
+
 
                 authors: ID,last-name,first-name,birth-year,death-year
                   e.g. 5,Gaiman,Neil,1960,NULL
@@ -63,7 +63,7 @@ class BooksDataSource:
                   e.g. 41,22
                        6,5
                        6,6
-                  
+
                   [that is, book 41 was written by author 22, while book 6
                     was written by both author 5 and author 6]
 
@@ -73,11 +73,19 @@ class BooksDataSource:
             NOTE TO STUDENTS: I have not specified how you will store the books/authors
             data in a BooksDataSource object. That will be up to you, in Phase 3.
         '''
-        pass
+        books = []
+        with open(books_filename, newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                print(row[0])
+
 
     def book(self, book_id):
         ''' Returns the book with the specified ID. (See the BooksDataSource comment
-            for a description of how a book is represented.) '''
+            for a description of how a book is represented.)
+
+            Raises ValueError if book_id is not a valid book ID.
+        '''
         return {}
 
     def books(self, *, author_id=None, search_text=None, start_year=None, end_year=None, sort_by='title'):
@@ -97,14 +105,24 @@ class BooksDataSource:
 
                 'year' -- sorts by publication_year, breaking ties with (case-insenstive) title
                 default -- sorts by (case-insensitive) title, breaking ties with publication_year
-                
+
             See the BooksDataSource comment for a description of how a book is represented.
+
+            QUESTION: Should Python interfaces specify TypeError?
+            Raises TypeError if author_id, start_year, or end_year is non-None but not an integer.
+            Raises TypeError if search_text or sort_by is non-None, but not a string.
+
+            QUESTION: How about ValueError? And if so, for which parameters?
+            Raises ValueError if author_id is non-None but is not a valid author ID.
         '''
         return []
 
     def author(self, author_id):
         ''' Returns the author with the specified ID. (See the BooksDataSource comment for a
-            description of how an author is represented.) '''
+            description of how an author is represented.)
+
+            Raises ValueError if author_id is not a valid author ID.
+        '''
         return {}
 
     def authors(self, *, book_id=None, search_text=None, start_year=None, end_year=None, sort_by='birth_year'):
@@ -129,7 +147,7 @@ class BooksDataSource:
                     then (case-insensitive) first_name
                 any other value - sorts by (case-insensitive) last_name, breaking ties with
                     (case-insensitive) first_name, then birth_year
-        
+
             See the BooksDataSource comment for a description of how an author is represented.
         '''
         return []
@@ -151,5 +169,4 @@ class BooksDataSource:
     def authors_for_book(self, book_id):
         ''' Returns a list of all the authors of the book with the specified book ID.
             See the BooksDataSource comment for a description of how an author is represented. '''
-        return self.books(book_id=book_id)
-
+        return self.authors(book_id=book_id)
