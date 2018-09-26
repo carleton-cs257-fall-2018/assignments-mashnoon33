@@ -150,7 +150,7 @@ class BooksDataSource:
         results_start_year = []
         results_end_year = []
 
-        resultArray = []
+        resultArray = [] # Maintains an array of array of results per speficiation
 
         if author_id != None:
             for id in self.link:
@@ -165,11 +165,13 @@ class BooksDataSource:
                 if book['title'].lower().find(search_text.lower())>-1:
                     results_search_text.append(book)
             resultArray.append(results_search_text)
+
         if start_year != None:
             for book in self.bookList:
                 if book['publication_year']>= start_year:
                     results_start_year.append(book)
             resultArray.append(results_start_year)
+
         if end_year != None:
             for book in self.bookList:
                 if book['publication_year']<= end_year:
@@ -252,7 +254,7 @@ class BooksDataSource:
                 if author['birth_year']>= start_year:
                     results_start_year.append(author)
             resultArray.append(results_start_year)
-            
+
         if end_year != None:
             if end_year >= self.now.year:
                 if sort_by == 'birth_year' :
@@ -277,6 +279,42 @@ class BooksDataSource:
                 return self.sort_by_lastName(tmp)
         return sortedResultArray[0]
 
+    # Based on JYamada's code
+    def sort_by_title(self,array):
+        '''
+        Uses the fact that sorted is 'stable' to sort the the books by Title first and then year
+        '''
+        newList = sorted(array, key=lambda k: k['publication_year'])
+        newList_ = sorted(newList, key=lambda k: k['title'])
+        return newList_
+
+    def sort_by_year(self,array):
+        '''
+        Uses the fact that sorted is 'stable' to sort the the books by year first and then title
+        '''
+        newList = sorted(array, key=lambda k: k['title'])
+        newList_ = sorted(newList, key=lambda k: k['year'])
+        return newList_
+
+    def sort_by_birth_year(self,array):
+        '''
+        Uses the fact that sorted is 'stable' to sort the the authors in the order --
+        birth_year, last_name, first_name
+        '''
+        newList = sorted(array, key=lambda k: k['first_name'])
+        newList_ = sorted(newList, key=lambda k: k['last_name'])
+        newList__ = sorted(newList_, key=lambda k: k['birth_year'])
+        return newList__
+
+    def sort_by_lastName(self,array):
+        '''
+        Uses the fact that sorted is 'stable' to sort the the authors in the order --
+        last_name, first_name, birth_year
+        '''
+        newList = sorted(array, key=lambda k: k['birth_year'])
+        newList_ = sorted(newList, key=lambda k: k['first_name'])
+        newList__ = sorted(newList_, key=lambda k: k['last_name'])
+        return newList__
 
     # Note for my students: The following two methods provide no new functionality beyond
     # what the books(...) and authors(...) methods already provide. But they do represent a
@@ -286,28 +324,6 @@ class BooksDataSource:
     # A question for you: do you think it's worth creating and then maintaining these
     # particular convenience methods? Is books_for_author(17) better than books(author_id=17)?
 
-    # Based on JYamada's code
-    def sort_by_title(self,array):
-        newList = sorted(array, key=lambda k: k['publication_year'])
-        newList_ = sorted(newList, key=lambda k: k['title'])
-        return newList_
-
-    def sort_by_year(self,array):
-        newList = sorted(array, key=lambda k: k['title'])
-        newList_ = sorted(newList, key=lambda k: k['year'])
-        return newList_
-
-    def sort_by_birth_year(self,array):
-        newList = sorted(array, key=lambda k: k['first_name'])
-        newList_ = sorted(newList, key=lambda k: k['last_name'])
-        newList__ = sorted(newList_, key=lambda k: k['birth_year'])
-        return newList__
-
-    def sort_by_lastName(self,array):
-        newList = sorted(array, key=lambda k: k['birth_year'])
-        newList_ = sorted(newList, key=lambda k: k['first_name'])
-        newList__ = sorted(newList_, key=lambda k: k['last_name'])
-        return newList__
     def findArrayIntersections(self,sortedResultArray):
         '''
         Finds common elements in the provided array of arraysself.
