@@ -67,6 +67,7 @@ class testBooks(unittest.TestCase):
         self.assertTrue(len(temp)>0, "The method is supposed to return atleast one author")
         self.assertIn({'id': 5, 'last_name': 'Gaiman', 'first_name': 'Neil',
          'birth_year': 1960, 'death_year': None}, temp)
+
     def test_authorWithEnd_year(self):
         temp =self.bds.authors(end_year= 2015)
         self.assertTrue(len(temp)>0, "The method is supposed to return atleast one author")
@@ -74,12 +75,16 @@ class testBooks(unittest.TestCase):
         self.assertIn({'id': 5, 'last_name': 'Gaiman', 'first_name': 'Neil',
      'birth_year': 1960, 'death_year': None}, temp)
 
-    # def test_authorWithEnd_year_null(self):
-    #     temp =self.bds.authors(end_year= None)
-    #     self.assertTrue(len(temp)>0, "The method is supposed to return atleast one author")
-    #     self.assertIn({'id': 5, 'last_name': 'Gaiman', 'first_name': 'Neil',
-    #  'birth_year': 1960, 'death_year': None}, temp)
+    def test_authorAll(self):
+        temp =self.bds.authors(book_id=6, start_year= 1960, end_year= 1960)
+        self.assertEqual(len(temp), 1)
 
+        self.assertIn({'id': 5, 'last_name': 'Gaiman', 'first_name': 'Neil',
+     'birth_year': 1960, 'death_year': None}, temp)
 
+    def test_getAllAuthors(self):
+        temp =self.bds.authors(end_year= 9999999999999) #FUTUREPROOF
+        self.assertEqual(len(temp), 25)
+        
 if __name__ == "__main__":
     unittest.main() # run all tests

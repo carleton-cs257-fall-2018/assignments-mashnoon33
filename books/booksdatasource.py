@@ -82,7 +82,6 @@ class BooksDataSource:
         self.link = []
         self.now = datetime.datetime.now()
 
-
         with open(books_filename, newline='') as f:
             reader = csv.reader(f)
             for row in reader:
@@ -116,9 +115,7 @@ class BooksDataSource:
         for item in self.bookList:
             if item['id'] == book_id:
                 return item
-
         return("Book not found")
-
 
     def books(self, *, author_id=None, search_text=None, start_year=None, end_year=None, sort_by='title'):
         ''' Returns a list of all the books in this data source matching all of
@@ -147,12 +144,13 @@ class BooksDataSource:
             QUESTION: How about ValueError? And if so, for which parameters?
             Raises ValueError if author_id is non-None but is not a valid author ID.
         '''
+        
         results_author_id = []
         results_search_text = []
         results_start_year = []
         results_end_year = []
 
-        test = []
+        resultArray = []
 
         if author_id != None:
             for id in self.link:
@@ -160,30 +158,30 @@ class BooksDataSource:
                     for book in self.bookList:
                         if book['id'] == id['book_id']:
                             results_author_id.append(book)
-            test.append(results_author_id)
+            resultArray.append(results_author_id)
+
         if search_text != None:
             for book in self.bookList:
                 if book['title'].find(search_text)>-1:
                     results_search_text.append(book)
-            test.append(results_search_text)
+            resultArray.append(results_search_text)
         if start_year != None:
             for book in self.bookList:
                 if book['publication_year']>= start_year:
                     results_start_year.append(book)
-            test.append(results_start_year)
+            resultArray.append(results_start_year)
         if end_year != None:
             for book in self.bookList:
                 if book['publication_year']<= end_year:
                     results_end_year.append(book)
-            test.append(results_end_year)
+            resultArray.append(results_end_year)
 
-        cat = sorted(test, key=len)
+        sortedResultArray = sorted(resultArray, key=len)
 
+        if len(sortedResultArray) >1 :
+            return self.findArrayIntersections(sortedResultArray)
 
-        if len(cat) >1 :
-            return self.helper(cat)
-
-        return cat[0]
+        return sortedResultArray[0]
 
     def author(self, author_id):
         ''' Returns the author with the specified ID. (See the BooksDataSource comment for a
@@ -227,7 +225,7 @@ class BooksDataSource:
         results_start_year = []
         results_end_year = []
 
-        test = []
+        resultArray = []
 
         if book_id != None:
             for id in self.link:
@@ -235,17 +233,17 @@ class BooksDataSource:
                     for author in self.authorList:
                         if author['id'] == id['author_id']:
                             results_book_id.append(author)
-            test.append(results_book_id)
+            resultArray.append(results_book_id)
         if search_text != None:
             for author in self.authorList:
                 if author['first_name'].find(search_text)>-1 or author['last_name'].find(search_text)>-1:
                     results_search_text.append(author)
-            test.append(results_search_text)
+            resultArray.append(results_search_text)
         if start_year != None:
             for author in self.authorList:
                 if author['birth_year']>= start_year:
                     results_start_year.append(author)
-            test.append(results_start_year)
+            resultArray.append(results_start_year)
         if end_year != None:
             if end_year >= self.now.year:
                 return self.authorList
@@ -254,15 +252,14 @@ class BooksDataSource:
                     results_end_year.append(author)
                 elif author['death_year'] == None and end_year<= self.now.year:
                     results_end_year.append(author)
-            test.append(results_end_year)
+            resultArray.append(results_end_year)
 
-        cat = sorted(test, key=len)
+        sortedResultArray = sorted(resultArray, key=len)
 
+        if len(sortedResultArray) >1 :
+            return self.findArrayIntersections(sortedResultArray)
 
-        if len(cat) >1 :
-            return self.helper(cat)
-
-        return cat[0]
+        return sortedResultArray[0]
 
 
     # Note for my students: The following two methods provide no new functionality beyond
@@ -273,17 +270,20 @@ class BooksDataSource:
     # A question for you: do you think it's worth creating and then maintaining these
     # particular convenience methods? Is books_for_author(17) better than books(author_id=17)?
 
-    def helper(self,cat):
+    def findArrayIntersections(self,sortedResultArray):
+        '''
+        Finds common elements in the provided array of arraysself.
+        Returns an array of common elements
+        '''
         results = []
 
-        for item in cat[0]:
+        for item in sortedResultArray[0]:
             insert = True
-            for i in range(1, len(cat)):
-                if item not in cat[i]:
+            for i in range(1, len(sortedResultArray)):
+                if item not in sortedResultArray[i]:
                     insert = False
             if insert:
                 results.append(item)
-        # print('\n \n', results, '\n \n')
         return results
 
     def books_for_author(self, author_id):
@@ -295,11 +295,3 @@ class BooksDataSource:
         ''' Returns a list of all the authors of the book with the specified book ID.
             See the BooksDataSource comment for a description of how an author is represented. '''
         return self.authorList(book_id=book_id)
-
-
-def main():
-    bds = BooksDataSource('books.csv', 'authors.csv', 'books_authors.csv')
-    # print(bds.book(6))
-    print(bds.books(author_id= 5))
-if __name__=="__main__":
-    main()
