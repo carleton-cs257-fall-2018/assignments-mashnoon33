@@ -144,7 +144,7 @@ class BooksDataSource:
             QUESTION: How about ValueError? And if so, for which parameters?
             Raises ValueError if author_id is non-None but is not a valid author ID.
         '''
-        
+
         results_author_id = []
         results_search_text = []
         results_start_year = []
@@ -162,7 +162,7 @@ class BooksDataSource:
 
         if search_text != None:
             for book in self.bookList:
-                if book['title'].find(search_text)>-1:
+                if book['title'].lower().find(search_text.lower())>-1:
                     results_search_text.append(book)
             resultArray.append(results_search_text)
         if start_year != None:
@@ -176,11 +176,17 @@ class BooksDataSource:
                     results_end_year.append(book)
             resultArray.append(results_end_year)
 
+        # Sorts the array of array interms of len, longest to shortest
         sortedResultArray = sorted(resultArray, key=len)
 
         if len(sortedResultArray) >1 :
-            return self.findArrayIntersections(sortedResultArray)
-
+            tmp = self.findArrayIntersections(sortedResultArray)
+            if sort_by == 'title' :
+                return self.sort_by_title(tmp)
+            elif sort_by == 'year' :
+                return self.sort_by_year(tmp)
+            else:
+                pass
         return sortedResultArray[0]
 
     def author(self, author_id):
@@ -236,7 +242,7 @@ class BooksDataSource:
             resultArray.append(results_book_id)
         if search_text != None:
             for author in self.authorList:
-                if author['first_name'].find(search_text)>-1 or author['last_name'].find(search_text)>-1:
+                if author['first_name'].lower().find(search_text.lower())>-1 or author['last_name'].lower().find(search_text.lower())>-1:
                     results_search_text.append(author)
             resultArray.append(results_search_text)
         if start_year != None:
@@ -246,7 +252,11 @@ class BooksDataSource:
             resultArray.append(results_start_year)
         if end_year != None:
             if end_year >= self.now.year:
-                return self.authorList
+                if sort_by == 'birth_year' :
+                    return self.sort_by_birth_year(self.authorList)
+                else:
+                    return self.sort_by_lastName(self.authorList)
+
             for author in self.authorList:
                 if not author['death_year']== None and author['death_year']<= end_year:
                     results_end_year.append(author)
@@ -257,8 +267,11 @@ class BooksDataSource:
         sortedResultArray = sorted(resultArray, key=len)
 
         if len(sortedResultArray) >1 :
-            return self.findArrayIntersections(sortedResultArray)
-
+            tmp = self.findArrayIntersections(sortedResultArray)
+            if sort_by == 'birth_year' :
+                return self.sort_by_birth_year(tmp)
+            else:
+                return self.sort_by_lastName(tmp)
         return sortedResultArray[0]
 
 
@@ -270,13 +283,35 @@ class BooksDataSource:
     # A question for you: do you think it's worth creating and then maintaining these
     # particular convenience methods? Is books_for_author(17) better than books(author_id=17)?
 
+    # Based on JYamada's code
+    def sort_by_title(self,array):
+        newList = sorted(array, key=lambda k: k['publication_year'])
+        newList_ = sorted(newList, key=lambda k: k['title'])
+        return newList_
+
+    def sort_by_year(self,array):
+        newList = sorted(array, key=lambda k: k['title'])
+        newList_ = sorted(newList, key=lambda k: k['year'])
+        return newList_
+
+    def sort_by_birth_year(self,array):
+        newList = sorted(array, key=lambda k: k['first_name'])
+        newList_ = sorted(newList, key=lambda k: k['last_name'])
+        newList__ = sorted(newList_, key=lambda k: k['birth_year'])
+        return newList__
+
+    def sort_by_lastName(self,array):
+        newList = sorted(array, key=lambda k: k['birth_year'])
+        newList_ = sorted(newList, key=lambda k: k['first_name'])
+        newList__ = sorted(newList_, key=lambda k: k['last_name'])
+        return newList__
     def findArrayIntersections(self,sortedResultArray):
         '''
         Finds common elements in the provided array of arraysself.
         Returns an array of common elements
         '''
         results = []
-
+        # Iterates through the shortest array and then searches the rest for intersection.
         for item in sortedResultArray[0]:
             insert = True
             for i in range(1, len(sortedResultArray)):

@@ -83,8 +83,9 @@ class testBooks(unittest.TestCase):
      'birth_year': 1960, 'death_year': None}, temp)
 
     def test_getAllAuthors(self):
-        temp =self.bds.authors(end_year= 9999999999999) #FUTUREPROOF
+        temp =self.bds.authors(end_year= 9999999999999, sort_by='ss') #FUTUREPROOF
+        print(temp)
         self.assertEqual(len(temp), 25)
-        
+
 if __name__ == "__main__":
     unittest.main() # run all tests
