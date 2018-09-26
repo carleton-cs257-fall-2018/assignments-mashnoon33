@@ -240,16 +240,19 @@ class BooksDataSource:
                         if author['id'] == id['author_id']:
                             results_book_id.append(author)
             resultArray.append(results_book_id)
+
         if search_text != None:
             for author in self.authorList:
                 if author['first_name'].lower().find(search_text.lower())>-1 or author['last_name'].lower().find(search_text.lower())>-1:
                     results_search_text.append(author)
             resultArray.append(results_search_text)
+
         if start_year != None:
             for author in self.authorList:
                 if author['birth_year']>= start_year:
                     results_start_year.append(author)
             resultArray.append(results_start_year)
+            
         if end_year != None:
             if end_year >= self.now.year:
                 if sort_by == 'birth_year' :
