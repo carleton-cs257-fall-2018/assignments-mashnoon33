@@ -6,6 +6,10 @@
     For use in some assignments at the beginning of Carleton's
     CS 257 Software Design class, Fall 2018.
 '''
+import datetime
+import csv
+import sys
+
 
 class BooksDataSource:
     '''
@@ -73,12 +77,35 @@ class BooksDataSource:
             NOTE TO STUDENTS: I have not specified how you will store the books/authors
             data in a BooksDataSource object. That will be up to you, in Phase 3.
         '''
-        books = []
+        self.bookList = []
+        self.authorList = []
+        self.link = []
+        self.now = datetime.datetime.now()
+
+
         with open(books_filename, newline='') as f:
             reader = csv.reader(f)
             for row in reader:
-                print(row[0])
+                if row[2] != 'NULL' and row[2] != '' :
+                    book = {'id': int(row[0]), 'title': row[1], 'publication_year': int(row[2])}
+                    self.bookList.append(book)
 
+        with open(authors_filename, newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if row[4] != 'NULL':
+                    author = {'id': int(row[0]), 'last_name': row[1], 'first_name': row[2],
+                     'birth_year': int(row[3]), 'death_year': int(row[4])}
+                    self.authorList.append(author)
+                else :
+                    author = {'id': int(row[0]), 'last_name': row[1], 'first_name': row[2],
+                     'birth_year': int(row[3]), 'death_year': None}
+                    self.authorList.append(author)
+
+        with open(books_authors_link_filename, newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                self.link.append({'book_id' : int(row[0]), 'author_id' :  int(row[1])})
 
     def book(self, book_id):
         ''' Returns the book with the specified ID. (See the BooksDataSource comment
@@ -86,7 +113,12 @@ class BooksDataSource:
 
             Raises ValueError if book_id is not a valid book ID.
         '''
-        return {}
+        for item in self.bookList:
+            if item['id'] == book_id:
+                return item
+
+        return("Book not found")
+
 
     def books(self, *, author_id=None, search_text=None, start_year=None, end_year=None, sort_by='title'):
         ''' Returns a list of all the books in this data source matching all of
@@ -115,7 +147,43 @@ class BooksDataSource:
             QUESTION: How about ValueError? And if so, for which parameters?
             Raises ValueError if author_id is non-None but is not a valid author ID.
         '''
-        return []
+        results_author_id = []
+        results_search_text = []
+        results_start_year = []
+        results_end_year = []
+
+        test = []
+
+        if author_id != None:
+            for id in self.link:
+                if id['author_id']==author_id:
+                    for book in self.bookList:
+                        if book['id'] == id['book_id']:
+                            results_author_id.append(book)
+            test.append(results_author_id)
+        if search_text != None:
+            for book in self.bookList:
+                if book['title'].find(search_text)>-1:
+                    results_search_text.append(book)
+            test.append(results_search_text)
+        if start_year != None:
+            for book in self.bookList:
+                if book['publication_year']>= start_year:
+                    results_start_year.append(book)
+            test.append(results_start_year)
+        if end_year != None:
+            for book in self.bookList:
+                if book['publication_year']<= end_year:
+                    results_end_year.append(book)
+            test.append(results_end_year)
+
+        cat = sorted(test, key=len)
+
+
+        if len(cat) >1 :
+            return self.helper(cat)
+
+        return cat[0]
 
     def author(self, author_id):
         ''' Returns the author with the specified ID. (See the BooksDataSource comment for a
@@ -123,7 +191,11 @@ class BooksDataSource:
 
             Raises ValueError if author_id is not a valid author ID.
         '''
-        return {}
+        for item in self.authorList:
+            if item['id'] == author_id:
+                return item
+
+        return("Author not found")
 
     def authors(self, *, book_id=None, search_text=None, start_year=None, end_year=None, sort_by='birth_year'):
         ''' Returns a list of all the authors in this data source matching all of the
@@ -150,7 +222,47 @@ class BooksDataSource:
 
             See the BooksDataSource comment for a description of how an author is represented.
         '''
-        return []
+        results_book_id = []
+        results_search_text = []
+        results_start_year = []
+        results_end_year = []
+
+        test = []
+
+        if book_id != None:
+            for id in self.link:
+                if id['book_id']==book_id:
+                    for author in self.authorList:
+                        if author['id'] == id['author_id']:
+                            results_book_id.append(author)
+            test.append(results_book_id)
+        if search_text != None:
+            for author in self.authorList:
+                if author['first_name'].find(search_text)>-1 or author['last_name'].find(search_text)>-1:
+                    results_search_text.append(author)
+            test.append(results_search_text)
+        if start_year != None:
+            for author in self.authorList:
+                if author['birth_year']>= start_year:
+                    results_start_year.append(author)
+            test.append(results_start_year)
+        if end_year != None:
+            if end_year >= self.now.year:
+                return self.authorList
+            for author in self.authorList:
+                if not author['death_year']== None and author['death_year']<= end_year:
+                    results_end_year.append(author)
+                elif author['death_year'] == None and end_year<= self.now.year:
+                    results_end_year.append(author)
+            test.append(results_end_year)
+
+        cat = sorted(test, key=len)
+
+
+        if len(cat) >1 :
+            return self.helper(cat)
+
+        return cat[0]
 
 
     # Note for my students: The following two methods provide no new functionality beyond
@@ -161,12 +273,33 @@ class BooksDataSource:
     # A question for you: do you think it's worth creating and then maintaining these
     # particular convenience methods? Is books_for_author(17) better than books(author_id=17)?
 
+    def helper(self,cat):
+        results = []
+
+        for item in cat[0]:
+            insert = True
+            for i in range(1, len(cat)):
+                if item not in cat[i]:
+                    insert = False
+            if insert:
+                results.append(item)
+        # print('\n \n', results, '\n \n')
+        return results
+
     def books_for_author(self, author_id):
         ''' Returns a list of all the books written by the author with the specified author ID.
             See the BooksDataSource comment for a description of how an book is represented. '''
-        return self.books(author_id=author_id)
+        return self.bookList(author_id=author_id)
 
     def authors_for_book(self, book_id):
         ''' Returns a list of all the authors of the book with the specified book ID.
             See the BooksDataSource comment for a description of how an author is represented. '''
-        return self.authors(book_id=book_id)
+        return self.authorList(book_id=book_id)
+
+
+def main():
+    bds = BooksDataSource('books.csv', 'authors.csv', 'books_authors.csv')
+    # print(bds.book(6))
+    print(bds.books(author_id= 5))
+if __name__=="__main__":
+    main()
