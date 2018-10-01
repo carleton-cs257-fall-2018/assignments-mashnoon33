@@ -9,6 +9,7 @@
 
 import json
 import requests
+import sys
 
 
 def get_ssh_keys(q):
@@ -18,14 +19,13 @@ def get_ssh_keys(q):
     cat = requests.get(api_url_base, headers={"api-key": api_token, "query" : q})
     sanity = json.loads(cat.text)
     for item in sanity['results'] :
-        x+=1
         print(item)
         return
 #
     # response = requests.get(api_url, headers=headers)
 
 def main():
-    get_ssh_keys(q)
+    get_ssh_keys(sys.argv[0])
 
 
 if __name__ == '__main__':
