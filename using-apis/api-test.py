@@ -14,18 +14,17 @@ import sys
 
 def get_ssh_keys(query):
     api_token = '340187c3b6aa4d838984bcff8594c47d'
-    api_url_base = f"https://api.nytimes.com/svc/movies/v2/reviews/search.json"
-    print(api_url_base)
-    response = requests.get(api_url_base, headers={"api-key": api_token}, params={"query": query} )
-    print(response)
+    api_url_base = "http://www.omdbapi.com/?i=tt3896198&apikey=515febc6"
+    response = requests.get(api_url_base, params={"s": query} )
     jsonify = json.loads(response.text)
-    for item in jsonify['results'] :
-        print(item)
-        return
+    print(jsonify)
+        # print(item['display_title'], item['mpaa_rating'], item['opening_date'])
+
 #
     # response = requests.get(api_url, headers=headers)
 
 def main():
+    print(sys.argv[1])
     get_ssh_keys(sys.argv[1])
 
 
