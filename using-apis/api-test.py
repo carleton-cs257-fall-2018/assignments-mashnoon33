@@ -15,12 +15,12 @@ import sys
 def get_ssh_keys(q):
     api_token = '340187c3b6aa4d838984bcff8594c47d'
     query = q
-    api_url_base = 'https://api.nytimes.com/svc/movies/v2/reviews/search.json'
-    cat = requests.get(api_url_base, headers={"api-key": api_token, "query" : q})
-    sanity = json.loads(cat.text)
-    for item in sanity['results'] :
+    api_url_base = 'https://api.nytimes.com/svc/movies/v2/reviews/search.json/'
+    response = requests.get(api_url_base, headers={"api-key": api_token})
+    print(response)
+    jsonify = json.loads(response.text)
+    for item in jsonify['results'] :
         print(item)
-        return
 #
     # response = requests.get(api_url, headers=headers)
 
