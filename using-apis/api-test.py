@@ -12,9 +12,8 @@ import requests
 import sys
 
 
-def get_ssh_keys(q):
+def get_ssh_keys(query):
     api_token = '340187c3b6aa4d838984bcff8594c47d'
-    query = q
     api_url_base = f"https://api.nytimes.com/svc/movies/v2/reviews/search.json"
     print(api_url_base)
     response = requests.get(api_url_base, headers={"api-key": api_token}, params={"query": query} )
