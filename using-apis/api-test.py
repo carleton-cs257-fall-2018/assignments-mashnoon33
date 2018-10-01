@@ -17,7 +17,8 @@ def get_ssh_keys(query):
     api_url_base = "http://www.omdbapi.com/?i=tt3896198&apikey=515febc6"
     response = requests.get(api_url_base, params={"s": query} )
     jsonify = json.loads(response.text)
-    print(jsonify)
+    for item in jsonify['Search'] :
+        print(item['Title'])
         # print(item['display_title'], item['mpaa_rating'], item['opening_date'])
 
 #
