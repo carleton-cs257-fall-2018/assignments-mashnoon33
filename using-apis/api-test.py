@@ -14,11 +14,18 @@ import sys
 
 def get_ssh_keys(query):
     api_token = '340187c3b6aa4d838984bcff8594c47d'
-    api_url_base = "http://www.omdbapi.com/?i=tt3896198&apikey=515febc6"
+    api_url_base = "http://www.omdbapi.com/?apikey=515febc6&"
+
     response = requests.get(api_url_base, params={"s": query} )
     jsonify = json.loads(response.text)
+
     for item in jsonify['Search'] :
-        print(item['Title'])
+        response_ = requests.get(api_url_base, params={"i": item['imdbID']})
+        jsonify_ = json.loads(response_.text)
+        print(jsonify_['Title'])
+
+
+
         # print(item['display_title'], item['mpaa_rating'], item['opening_date'])
 
 #
