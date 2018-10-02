@@ -74,7 +74,7 @@ def main():
         run = Apitest()
         for i in range(3,len(sys.argv)):
             if i==3:
-                if sys.argv[3] in ["title", "series", "episode"]:
+                if sys.argv[3] in ["movie", "series", "episode"]:
                     run.addParam('type',sys.argv[3])
                 else:
                     raise ValueError("WARNING : Only acceptable values for type is [movie, series, episode]")
