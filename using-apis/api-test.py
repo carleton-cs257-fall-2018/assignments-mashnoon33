@@ -30,10 +30,12 @@ class Apitest:
     def fetch(self,type, param):
         if type=="search":
             self.search(param)
-        if type=="movie":
+        elif type=="title":
             self.getMovieByName(param)
-        if type=="id":
+        elif type=="id":
             self.getMovieByID(param)
+        else:
+            raise ValueError('WARNING : WARNING : Only acceptable values for searchType is [search, title, id]')
 
 
     # Returns all of the API's details about a movie given a movie's id
@@ -72,7 +74,7 @@ def main():
         run = Apitest()
         for i in range(3,len(sys.argv)):
             if i==3:
-                if sys.argv[3] in ["movie", "series", "episode"]:
+                if sys.argv[3] in ["title", "series", "episode"]:
                     run.addParam('type',sys.argv[3])
                 else:
                     raise ValueError("WARNING : Only acceptable values for type is [movie, series, episode]")
@@ -86,7 +88,7 @@ def main():
         run.fetch(sys.argv[1],sys.argv[2])
 
     else:
-        print("Usage: \npython3 api-test.py {search, movie, id} <search paramaters> \n\noptional arguments: \n[movie, series, episode]  --> Inidicate the type of Media \n<Year> ---> Indiciate the year released \n\nOnly the first two arguements are required.\n\nExamples :\npython3 api-test.py search ass movie 2013\npython3 api-test.py movie 'Eighth Grade'")
+        print("Usage: \npython3 api-test.py {search, title, id} <search paramaters> \n\noptional arguments: \n[movie, series, episode]  --> Inidicate the type of Media \n<Year> ---> Indiciate the year released \n\nOnly the first two arguements are required.\n\nExamples :\npython3 api-test.py search ass movie 2013\npython3 api-test.py title 'Eighth Grade'")
 
 
 if __name__ == '__main__':
