@@ -1,6 +1,7 @@
 '''
     api-test.py
     Jeff Ondich, 11 April 2016
+    Edited by Mash Ibetsum, Justin Yamada, and Justin Hahn
 
     An example for CS 257 Software Design. How to retrieve results
     from an HTTP-based API, parse the results (JSON in this case),
@@ -12,21 +13,12 @@ import requests
 import sys
 
 class Apitest:
+    # Initializes an initial dictionary
     def __init__(self):
         self.api_url_base = "http://www.omdbapi.com/?apikey=515febc6&"
         self.initial= {}
 
-
-    # Returns all of the API's details about a movie given a movie's name
-    def getMovieByName(self, param):
-        self.initial["t"] = param
-        response = requests.get(self.api_url_base, params=self.initial)
-        jsonify = json.loads(response.text)
-        try:
-            self._printer(jsonify)
-        except KeyError:
-            print('\n No Movies found')
-
+    # Calls the getMovieByName, getMovieByID, and search given the correct type
     def fetch(self,type, param):
         if type=="search":
             self.search(param)
@@ -36,9 +28,18 @@ class Apitest:
             self.getMovieByID(param)
         else:
             raise ValueError('WARNING : WARNING : Only acceptable values for searchType is [search, title, id]')
+        
+    # Prints all of the API's details about a movie given a movie's name
+    def getMovieByName(self, param):
+        self.initial["t"] = param
+        response = requests.get(self.api_url_base, params=self.initial)
+        jsonify = json.loads(response.text)
+        try:
+            self._printer(jsonify)
+        except KeyError:
+            print('\n No Movies found')
 
-
-    # Returns all of the API's details about a movie given a movie's id
+    # Prints all of the API's details about a movie given a movie's id
     def getMovieByID(self, param):
         self.initial["i"] = param
         response = requests.get(self.api_url_base, params=self.initial)
@@ -48,7 +49,7 @@ class Apitest:
         except KeyError:
             print('\n No Movies found')
 
-    # Returns ten movies that contain the given search term with minimal details
+    # Prints ten movies that contain the given search term with minimal details
     def search(self,param):
         self.initial["s"] = param
         response = requests.get(self.api_url_base, params=self.initial )
@@ -58,7 +59,8 @@ class Apitest:
                 self._printer(item)
         except KeyError:
             print('\n No Movies found')
-
+    
+    # Prints the given dictionary with certain keys removed in a nice format
     def _printer(self,movieDict):
         dict = movieDict
         for key in dict:
@@ -70,6 +72,7 @@ class Apitest:
         self.initial[key] = value
 
 def main():
+    # Checks if any parameters were incorrectly typed or not typed
     if len(sys.argv) >2:
         run = Apitest()
         for i in range(3,len(sys.argv)):
