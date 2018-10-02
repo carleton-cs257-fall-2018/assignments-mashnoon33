@@ -88,7 +88,7 @@ def main():
         run.fetch(sys.argv[1],sys.argv[2])
 
     else:
-        print("Usage: \npython3 api-test.py {search, title, id} <search paramaters> \n\noptional arguments: \n[movie, series, episode]  --> Inidicate the type of Media \n<Year> ---> Indiciate the year released \n\nOnly the first two arguements are required.\n\nExamples :\npython3 api-test.py search ass movie 2013\npython3 api-test.py title 'Eighth Grade'")
+        print("Usage: \npython3 api-test.py {search, title, id} <search paramaters> \n\noptional arguments: \n[movie, series, episode]  --> Inidicate the type of Media \n<Year> ---> Indiciate the year released (In order to use Year, You muse specify the type of Media) \n\nOnly the first two arguements are required.\n\nExamples :\npython3 api-test.py search ass movie 2013\npython3 api-test.py title 'Eighth Grade'")
 
 
 if __name__ == '__main__':
