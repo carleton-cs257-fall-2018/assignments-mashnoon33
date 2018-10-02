@@ -12,9 +12,22 @@ import requests
 import sys
 
 class Apitest:
-    def __init__(self,type, param):
+    def __init__(self):
         self.api_url_base = "http://www.omdbapi.com/?apikey=515febc6&"
+        self.initial= {}
 
+
+    # Returns all of the API's details about a movie given a movie's name
+    def getMovieByName(self, param):
+        self.initial["t"] = param
+        response = requests.get(self.api_url_base, params=self.initial)
+        jsonify = json.loads(response.text)
+        try:
+            self._printer(jsonify)
+        except KeyError:
+            print('\n No Movies found')
+
+    def fetch(self,type, param):
         if type=="search":
             self.search(param)
         if type=="movie":
@@ -23,25 +36,20 @@ class Apitest:
             self.getMovieByID(param)
 
 
-    def getMovieByName(self, param):
-        response = requests.get(self.api_url_base, params={"t": param})
-        jsonify = json.loads(response.text)
-        try:
-            self._printer(jsonify)
-        except KeyError:
-            print('\n No Movies found')
-
-
+    # Returns all of the API's details about a movie given a movie's id
     def getMovieByID(self, param):
-        response = requests.get(self.api_url_base, params={"i": param})
+        self.initial["i"] = param
+        response = requests.get(self.api_url_base, params=self.initial)
         jsonify = json.loads(response.text)
         try:
             self._printer(jsonify)
         except KeyError:
             print('\n No Movies found')
 
+    # Returns ten movies that contain the given search term with minimal details
     def search(self,param):
-        response = requests.get(self.api_url_base, params={"s": param} )
+        self.initial["s"] = param
+        response = requests.get(self.api_url_base, params=self.initial )
         jsonify = json.loads(response.text)
         try:
             for item in jsonify['Search'] :
@@ -56,18 +64,30 @@ class Apitest:
                 print(key , ":" , dict[key])
         print("\n")
 
+    def addParam(self, key, value):
+        self.initial[key] = value
+
 def main():
-    if len(sys.argv) >1:
-        run = Apitest(sys.argv[1],sys.argv[2])
+    if len(sys.argv) >2:
+        run = Apitest()
+        for i in range(3,len(sys.argv)):
+            if i==3:
+                if sys.argv[3] in ["movie", "series", "episode"]:
+                    run.addParam('type',sys.argv[3])
+                else:
+                    raise ValueError("WARNING : Only acceptable values for type is [movie, series, episode]")
+            if i==4:
+                try:
+                    if int(sys.argv[4])>0:
+                        run.addParam('y',sys.argv[4])
+                except ValueError:
+                    print('\nWARNING : Only Positive Numericals allowed, running the search without a year param\n')
+
+        run.fetch(sys.argv[1],sys.argv[2])
+
     else:
-        print("Usage statement")
-#NOTE : FIX THIS
+        print("Usage: \npython3 api-test.py {search, movie, id} <search paramaters> \n\noptional arguments: \n[movie, series, episode]  --> Inidicate the type of Media \n<Year> ---> Indiciate the year released \n\nOnly the first two arguements are required.\n\nExamples :\npython3 api-test.py search ass movie 2013\npython3 api-test.py movie 'Eighth Grade'")
 
 
 if __name__ == '__main__':
-    # When I use argparse to parse my command line, I usually
-    # put the argparse setup here in the global code, and then
-    # call a function called main to do the actual work of
-    # the program.
-
     main()
