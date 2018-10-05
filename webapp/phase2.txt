@@ -1,0 +1,66 @@
+Mash Ibtesum (Group of 1)
+
+DATASET : College ScoreCard (data.gov)
+DETAILS : The College ScoreCard is a database that provides a comprehensive profile
+of colleges, including --
+
+- School
+    - Name
+    - Currently Operating status
+    - URLs for the Institution’s Homepage and Net Price Calculator
+    - Main vs Branch Campus
+    - Accrediting Agency
+    - Degree Type
+    - Public/Private Nonprofit/Private For-Profit
+    - Carnegie Classifications
+    - Specialized Mission or Religious Affiliation
+    - Distance-Education-Only Indicator
+    - School Revenue and Expenditures
+    - Heightened Cash Monitoring 2 Indicator
+- Academics
+    - Percentage of Degrees Awarded by Program
+    - Programs Offered by Degree Type
+- Admissions
+    - Acceptance Rate
+    - SAT and ACT scores
+- Student
+    - Number of Undergraduate Students
+    - Undergraduate Student Body by Race/Ethnicity
+    - Undergraduate Students by Part-Time status
+    - Undergraduate Students by Age (25 or Over)
+    - Income Brackets of Federal Financial Aid Recipients
+    - Share of First-Generation Students
+    - Number of FAFSA Submissions to Colleges
+- Cost
+    - Average Cost of Attendance
+    - Tuition and Fees
+    - Average Net Price, by Income Level
+- Aid
+    - Percent of Undergraduates Receiving Federal Loans
+    - Percentage of Pell Grant Recipients
+    - Cumulative Median Debt, Disaggregated by Student Subgroups
+    - Typical Monthly Loan Payments of Graduates
+- Repayment
+    - Cohort Default Rate
+    - Repayment Rate on Federal Student Loans, Disaggregated by Student Subgroups
+- Completion
+    - Completion Rates for First-Time, Full-Time Students
+    - Retention Rates for First-Time Students
+    - 150 percent Completion Rate (IPEDS)
+    - 200 percent Completion Rate (IPEDS)
+    - Completion and Transfer Outcomes for Title IV Students, Disaggregated by Student Subgroups
+
+- Earnings
+    - Average and Median Earnings, Disaggregated by Student Subgroups
+    - Share of Former Students Earning Over $25,000
+
+
+USER STORIES:
+The site should be a easy way to query US colleges with varying parameter.
+
+- Bill wants to know what is the best small private liberal college that will give him the most financial aid
+- Audrey doesn't know where she wants do go for college, but is interested in greek life and volleyball
+- Andrew only has a 26 ACT score, so he wants to know which schools are realistic for him in the state of New York
+- Rae's mom wants to know whats are the top 50 colleges in the State of California
+- James wants to compare Carleton College and Macalaster to help him decide between them
+- NFHS guidance counselor wants to know which college in MN has the highest retention rate and is at-least 30% diverse
