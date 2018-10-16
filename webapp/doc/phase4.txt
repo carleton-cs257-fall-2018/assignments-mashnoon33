@@ -1,3 +1,5 @@
+PHASE 4 Documentation for Mash's webapp
+
 ## DATABASE STRUCTURE
 
 One huge database of schools with a lot of columns
@@ -126,6 +128,21 @@ CREATE TABLE schools (
       COUNT_WNE_INDEP0_INC1_P10 INT,
 );
 
+
+CREATE TABLE region_id ( <---- PROBABLY ISNT NECESSARY
+      id SERIAL,
+      name TEXT
+);
+
+
+**** POTENTIAL EFFICIENCY IMPROVEMENT ****
+
+Pre - building lists of schools by state / regions to speed up search ?
+
+
+
+
+
 1. SYNOPSIS: Filter the list of schools using the query parameters. At any moment, multiple
 parameters are going to be used.
 
@@ -154,8 +171,7 @@ ACTCMMID            n                     0-34                   [15-34]        
 COSTT4_A            n                  0 - 100,000             [0 - 100,000]    Avg Cost of attendace
 MD_EARN_WNE_P9      n                  0 - 300,000             [0 - 300,000]    Median earning after 9 yrs
 ADM_RATE            n                    0 - 1                    [0 - 1]       Admission rate in decimals
-page                y               1 - 1000                      1             Number of page to display
-
+page                y                   1 - 1000                      1         Number of page to display
 
 REGION_ID_LIST :
 1	New England (CT, ME, MA, NH, RI, VT)
