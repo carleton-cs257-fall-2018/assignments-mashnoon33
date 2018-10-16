@@ -185,7 +185,7 @@ REGION_ID_LIST :
 9	Outlying Areas (AS, FM, GU, MH, MP, PR, PW, VI)
 
 
-MAJOR_LIST :
+MAJOR_LIST : [ Would probably need to parse the list to make it more suitable for the DB ]
 Agriculture, Agriculture Operations.
 Natural Resources And Conservation.
 Architecture .
