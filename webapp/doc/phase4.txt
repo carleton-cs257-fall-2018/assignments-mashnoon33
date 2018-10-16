@@ -162,16 +162,16 @@ RESPONSE: a list of 20 schools with the following details :
 GET Parameters :
 Parameters  |   Required   |          Valid Options          |   DEFAULT    |     DESCRIPTION
 ------------------------------------------------------------------------------
-type                y               public, private, all          all
-years               y                  2, 4, all                  all           2 year or 4 year colleges
-majors              n               see MAJOR_LIST                None
-region_id           n              see REGION_ID_LIST               None
-SAT_AVG             n                   200 - 1600              [800-1600]      AVG SAT score
-ACTCMMID            n                     0-34                   [15-34]        ACT midpoint
-COSTT4_A            n                  0 - 100,000             [0 - 100,000]    Avg Cost of attendace
-MD_EARN_WNE_P9      n                  0 - 300,000             [0 - 300,000]    Median earning after 9 yrs
-ADM_RATE            n                    0 - 1                    [0 - 1]       Admission rate in decimals
-page                y                   1 - 1000                      1         Number of page to display
+type                y            public, private, all (TXT)          all
+degree               y                 2, 4, all (TXT)               all           2 year or 4 year colleges
+majors              n               see MAJOR_LIST (TXT)            None
+region_id           n              see REGION_ID_LIST (INT)               None
+SAT_AVG             n                   200 - 1600 (INT ARR)           [800-1600]      AVG SAT score
+ACTCMMID            n                     0-34 (INT ARR)                  [15-34]        ACT midpoint
+COSTT4_A            n                  0 - 100,000 (INT ARR)           [0 - 100,000]    Avg Cost of attendace
+MD_EARN_WNE_P9      n                  0 - 300,000 (INT ARR)            [0 - 300,000]    Median earning after 9 yrs
+ADM_RATE            n                    0 - 1  (INT ARR)                  [0 - 1]       Admission rate in decimals
+page                y                   1 - 1000 (INT)                   1         Number of page to display
 
 REGION_ID_LIST :
 1	New England (CT, ME, MA, NH, RI, VT)
