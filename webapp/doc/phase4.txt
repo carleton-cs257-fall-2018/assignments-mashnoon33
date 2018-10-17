@@ -162,69 +162,16 @@ RESPONSE: a list of 20 schools with the following details :
 GET Parameters :
 Parameters  |   Required   |          Valid Options          |   DEFAULT    |     DESCRIPTION
 ------------------------------------------------------------------------------
-type                y            public, private, all (TXT)          all
-degree               y                 2, 4, all (TXT)               all           2 year or 4 year colleges
-majors              n               see MAJOR_LIST (TXT)            None
-region_id           n              see REGION_ID_LIST (INT)               None
-SAT_AVG             n                   200 - 1600 (INT ARR)           [800-1600]      AVG SAT score
-ACTCMMID            n                     0-34 (INT ARR)                  [15-34]        ACT midpoint
-COSTT4_A            n                  0 - 100,000 (INT ARR)           [0 - 100,000]    Avg Cost of attendace
-MD_EARN_WNE_P9      n                  0 - 300,000 (INT ARR)            [0 - 300,000]    Median earning after 9 yrs
-ADM_RATE            n                    0 - 1  (INT ARR)                  [0 - 1]       Admission rate in decimals
-page                y                   1 - 1000 (INT)                   1         Number of page to display
-
-REGION_ID_LIST :
-1	New England (CT, ME, MA, NH, RI, VT)
-2	Mid East (DE, DC, MD, NJ, NY, PA)
-3	Great Lakes (IL, IN, MI, OH, WI)
-4	Plains (IA, KS, MN, MO, NE, ND, SD)
-5	Southeast (AL, AR, FL, GA, KY, LA, MS, NC, SC, TN, VA, WV)
-6	Southwest (AZ, NM, OK, TX)
-7	Rocky Mountains (CO, ID, MT, UT, WY)
-8	Far West (AK, CA, HI, NV, OR, WA)
-9	Outlying Areas (AS, FM, GU, MH, MP, PR, PW, VI)
-
-
-MAJOR_LIST : [ Would probably need to parse the list to make it more suitable for the DB ]
-Agriculture, Agriculture Operations.
-Natural Resources And Conservation.
-Architecture .
-Area, Ethnic, Cultural, Gender, And Group Studies.
-Communication, Journalism, .
-Communications Technologies/Technicians And Support Services.
-Computer And Information Sciences And Support Services.
-Personal And Culinary Services.
-Education.
-Engineering.
-Engineering Technologies And Engineering-Related Fields.
-Foreign Languages, Literatures, And Linguistics.
-Family And Consumer Sciences/Human Sciences.
-Legal Professions And Studies.
-English Language And Literature/Letters.
-Liberal Arts And Sciences, General Studies And Humanities.
-Library Science.
-Biological And Biomedical Sciences.
-Mathematics And Statistics.
-Military Technologies And Applied Sciences.
-Multi/Interdisciplinary Studies.
-Parks, Recreation, Leisure, And Fitness Studies.
-Philosophy And Religious Studies.
-Theology And Religious Vocations.
-Physical Sciences.
-Science Technologies/Technicians.
-Psychology.
-Homeland Security, Law Enforcement, Firefighting
-Public Administration And Social Service Professions.
-Social Sciences.
-Construction Trades.
-Mechanic And Repair Technologies/Technicians.
-Precision Production.
-Transportation And Materials Moving.
-Visual And Performing Arts.
-Health Professions .
-Business, Management, Marketing
-History.
-
+type                y            public, private, all (TXT)       all
+degree              y                 2, 4, all (TXT)            all           2 year or 4 year colleges
+majors              n               see MAJOR_LIST (TXT)         all
+region_id           n              see REGION_ID_LIST (INT)      all
+SAT_AVG             n                   200 - 1600 (INT ARR)    [800-1600]      AVG SAT score
+ACTCMMID            n                    0-34 (INT ARR)         [15-34]        ACT midpoint
+COSTT4_A            n                 0 - 100,000 (INT ARR)   [0 - 100,000]    Avg Cost of attendace
+MD_EARN_WNE_P9      n                 0 - 300,000 (INT ARR)   [0 - 300,000]    Median earning after 9 yrs
+ADM_RATE            n                  0 - 1  (INT ARR)         [0 - 1]       Admission rate in decimals
+page                y                 1 - 1000 (INT)                1         Number of page to display
 
 EXAMPLE: https://example.com/search/SAT_AVG=1200%2C1400&type=private&major=cs&TUITIONFEE_OUT=0%2C70000&ADM_RATE=10%2C30&page=1
 
@@ -410,6 +357,61 @@ EXAMPLE: https://example.com/name/carleton
 MD_EARN_WNE_P9 : 7500,
 }
 ]
+
+
+
+## REGION_ID_LIST :
+1	New England (CT, ME, MA, NH, RI, VT)
+2	Mid East (DE, DC, MD, NJ, NY, PA)
+3	Great Lakes (IL, IN, MI, OH, WI)
+4	Plains (IA, KS, MN, MO, NE, ND, SD)
+5	Southeast (AL, AR, FL, GA, KY, LA, MS, NC, SC, TN, VA, WV)
+6	Southwest (AZ, NM, OK, TX)
+7	Rocky Mountains (CO, ID, MT, UT, WY)
+8	Far West (AK, CA, HI, NV, OR, WA)
+9	Outlying Areas (AS, FM, GU, MH, MP, PR, PW, VI)
+
+
+## MAJOR_LIST : [ Would probably need to parse the list to make it more suitable for the DB ]
+Agriculture, Agriculture Operations.
+Natural Resources And Conservation.
+Architecture .
+Area, Ethnic, Cultural, Gender, And Group Studies.
+Communication, Journalism, .
+Communications Technologies/Technicians And Support Services.
+Computer And Information Sciences And Support Services.
+Personal And Culinary Services.
+Education.
+Engineering.
+Engineering Technologies And Engineering-Related Fields.
+Foreign Languages, Literatures, And Linguistics.
+Family And Consumer Sciences/Human Sciences.
+Legal Professions And Studies.
+English Language And Literature/Letters.
+Liberal Arts And Sciences, General Studies And Humanities.
+Library Science.
+Biological And Biomedical Sciences.
+Mathematics And Statistics.
+Military Technologies And Applied Sciences.
+Multi/Interdisciplinary Studies.
+Parks, Recreation, Leisure, And Fitness Studies.
+Philosophy And Religious Studies.
+Theology And Religious Vocations.
+Physical Sciences.
+Science Technologies/Technicians.
+Psychology.
+Homeland Security, Law Enforcement, Firefighting
+Public Administration And Social Service Professions.
+Social Sciences.
+Construction Trades.
+Mechanic And Repair Technologies/Technicians.
+Precision Production.
+Transportation And Materials Moving.
+Visual And Performing Arts.
+Health Professions .
+Business, Management, Marketing
+History.
+
 
 
 
