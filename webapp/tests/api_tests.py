@@ -153,10 +153,14 @@ class testAPI(unittest.TestCase):
         self.assertEqual([] ,self.api.name("JONDICCCCCC--|||"))
 
     def test_search_with_params(self):
-        self.assertIn(self.carleton ,self.api.param(SAT_AVG=[1400,1500], ADM_RATE=[20,24], MN_EARN_WNE_INC3_P10=[70,000, 150,000], type="private"))
+        self.assertIn(self.carleton ,self.api.param(SAT_AVG=[1400,1500], ADM_RATE=[20,24], MD_EARN_WNE_P9=[70,000, 150,000], type="private"))
+
+    def test_search_with_params(self):
+        self.assertNotIn(self.carleton ,self.api.param(SAT_AVG=[1500,1600], ADM_RATE=[20,24], MD_EARN_WNE_P9=[70,000, 150,000], type="private"))
 
     def test_get_school(self):
         self.assertEqual(self.carleton_full, self.api.school(234000))
+
 
 if __name__ == "__main__":
     unittest.main() # run all tests

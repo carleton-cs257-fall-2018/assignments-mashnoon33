@@ -167,11 +167,11 @@ degree              y                 2, 4, all (TXT)            all           2
 majors              n               see MAJOR_LIST (TXT)         all
 region_id           n              see REGION_ID_LIST (INT)      all
 SAT_AVG             n                   200 - 1600 (INT ARR)    [800-1600]      AVG SAT score
-ACTCMMID            n                    0-34 (INT ARR)         [15-34]        ACT midpoint
-COSTT4_A            n                 0 - 100,000 (INT ARR)   [0 - 100,000]    Avg Cost of attendace
-MD_EARN_WNE_P9      n                 0 - 300,000 (INT ARR)   [0 - 300,000]    Median earning after 9 yrs
-ADM_RATE            n                  0 - 1  (INT ARR)         [0 - 1]       Admission rate in decimals
-page                y                 1 - 1000 (INT)                1         Number of page to display
+ACTCMMID            n                    0-34 (INT ARR)         [15-34]          ACT midpoint
+COSTT4_A            n                 0 - 100,000 (INT ARR)   [0 - 100,000]     Avg Cost of attendace
+MD_EARN_WNE_P9      n                 0 - 300,000 (INT ARR)   [0 - 300,000]      Median earning after 9 yrs
+ADM_RATE            n                  0 - 1  (INT ARR)         [0 - 1]         Admission rate in decimals
+page                y                 1 - 1000 (INT)                1           Number of page to display
 
 EXAMPLE: https://example.com/search/SAT_AVG=1200%2C1400&type=private&major=cs&TUITIONFEE_OUT=0%2C70000&ADM_RATE=10%2C30&page=1
 
@@ -358,7 +358,7 @@ MD_EARN_WNE_P9 : 7500,
 }
 ]
 
-
+----------------------------------------
 
 ## REGION_ID_LIST :
 1	New England (CT, ME, MA, NH, RI, VT)
