@@ -9,3 +9,9 @@ class api:
         return []
     def school(self, id):
         return {}
+    def getRegions(self):
+        return []
+    def getMajors(self):
+        return []
+    def getStataes(self):
+        return []

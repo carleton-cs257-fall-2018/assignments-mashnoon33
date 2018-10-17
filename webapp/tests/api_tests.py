@@ -169,7 +169,7 @@ class testAPI(unittest.TestCase):
     def test_util_states(self):
         expected = {"state" : "New York", "abbreviation" : "NY"}
         self.assertIn(expected ,self.api.getStataes())
-        self.assertEqual(52, len()self.api.getStataes())
+        self.assertEqual(52, len(self.api.getStataes()))
 
     def test_util_majors(self):
         self.assertIn("Computer Science" ,self.api.getMajors())
