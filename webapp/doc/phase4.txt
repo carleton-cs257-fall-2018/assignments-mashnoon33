@@ -141,7 +141,7 @@ Pre - building lists of schools by state / regions to speed up search ?
 
 
 
-
+## API STRUCTURE
 
 1. SYNOPSIS: Filter the list of schools using the query parameters. At any moment, multiple
 parameters are going to be used.
