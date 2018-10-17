@@ -8,14 +8,14 @@ One huge database of schools with a lot of columns
 // There is a data dictionary and example data for Carleton at the end of this doc
 
 CREATE TABLE schools (
-      ﻿INSTNM TEXT,
+      ﻿INSTNM TEXT, // will use better name later
       CITY TEXT,
       STABBR TEXT,
       ZIP INT,
       INSTURL TEXT,
       NPCURL TEXT,
       OPEID INT, // OPEID SERIAL (?)
-      REGION INT,
+      REGION_ID INT, -> Points to region table
       LOCALE INT,
       LATITUDE FLOAT,
       LONGITUDE FLOAT,
@@ -43,7 +43,8 @@ CREATE TABLE schools (
       ACTWRMID INT,
       SAT_AVG INT,
       SAT_AVG_ALL INT,
-      PCIP01 FLOAT,
+      MAJORS TEXT[],
+      PCIP01 FLOAT, // Replace PCIP with TEXT[] ^ , or have api do it?
       PCIP03 FLOAT,
       PCIP04 FLOAT,
       PCIP05 FLOAT,
@@ -128,11 +129,26 @@ CREATE TABLE schools (
       COUNT_WNE_INDEP0_INC1_P10 INT,
 );
 
+CREATE TABLE state (
+      id SERIAL,
+      abbreviation TEXT,
+      full_name TEXT
+)
 
-CREATE TABLE region_id ( <---- PROBABLY ISNT NECESSARY
+CREATE TABLE region_id (
+      id SERIAL,
+      name TEXT,
+      states TEXT[]
+);
+
+CREATE TABLE major (
       id SERIAL,
       name TEXT
 );
+
+
+
+CREATE TYPE mood AS ENUM () // figure out how to do enum
 
 
 **** POTENTIAL EFFICIENCY IMPROVEMENT ****
@@ -146,7 +162,7 @@ Pre - building lists of schools by state / regions to speed up search ?
 1. SYNOPSIS: Filter the list of schools using the query parameters. At any moment, multiple
 parameters are going to be used.
 
-QUERY (GET): /search/param1=<value>&param2=<value>&...page=<number>
+QUERY (GET): /schools/param1=<value>&param2=<value>&...page=<number>
 
 RESPONSE: a list of 20 schools with the following details :
           * name
@@ -173,7 +189,7 @@ MD_EARN_WNE_P9      n                 0 - 300,000 (INT ARR)   [0 - 300,000]     
 ADM_RATE            n                  0 - 1  (INT ARR)         [0 - 1]         Admission rate in decimals
 page                y                 1 - 1000 (INT)                1           Number of page to display
 
-EXAMPLE: https://example.com/search/SAT_AVG=1200%2C1400&type=private&major=cs&TUITIONFEE_OUT=0%2C70000&ADM_RATE=10%2C30&page=1
+EXAMPLE: https://example.com/schools/SAT_AVG=1200%2C1400&type=private&major=cs&TUITIONFEE_OUT=0%2C70000&ADM_RATE=10%2C30&page=1
 
 [
 {"﻿INSTNM" : "Carleton College",
@@ -193,12 +209,12 @@ MD_EARN_WNE_P9
 
 
 2. SYNOPSIS: Returns detailed profile of a singular college provided the 8 digit OPID
-QUERY (GET): /college/<OPEID>
+QUERY (GET): /school/<OPEID>
 
 RESPONSE: a single college and its whole profile with all 119 columns. See data
  dictionary at the end for unclear variable name
 
-EXAMPLE: https://example.com/college/234000
+EXAMPLE: https://example.com/school/234000
 [
 {
 "﻿INSTNM" :"Carleton College" ,
@@ -342,7 +358,7 @@ RESPONSE: a list of 20 schools with the following details :
           * Mid Career Income
           * SERIAL/ 8 digit unique id (OPEID)
 
-EXAMPLE: https://example.com/name/carleton
+EXAMPLE: https://example.com/schools/name/carleton or https://example.com/schools/name=carleton or https://example.com/schools/carleton (?)
 
 [
 {
@@ -357,6 +373,19 @@ EXAMPLE: https://example.com/name/carleton
 MD_EARN_WNE_P9 : 7500,
 }
 ]
+
+## Utility endpoints [good for populating dropdowns]
+4. /regions [returns a list of all the regions]
+
+eg : [{"Region" :  "Plains", "states" : ["CT", "ME", "MA", "NH", "RI", "VT"]}, ...]
+
+5. /states [returns a list of all the states]
+
+eg : [{"state" : "New York", "abbreviation" : "NY"}, ...]
+
+6. /majors [returns a list of all the possible majors]
+
+eg : ["Computer Science", "Cinema and Media Studies"]
 
 ----------------------------------------
 

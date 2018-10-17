@@ -161,6 +161,18 @@ class testAPI(unittest.TestCase):
     def test_get_school(self):
         self.assertEqual(self.carleton_full, self.api.school(234000))
 
+    def test_util_regions(self):
+        expected = {"Region" :  "Plains", "states" : ["CT", "ME", "MA", "NH", "RI", "VT"]}
+        self.assertIn(expected ,self.api.getRegions())
+        self.assertEqual(9, len(self.api.getRegions()))
+
+    def test_util_states(self):
+        expected = {"state" : "New York", "abbreviation" : "NY"}
+        self.assertIn(expected ,self.api.getStataes())
+        self.assertEqual(52, len()self.api.getStataes())
+
+    def test_util_majors(self):
+        self.assertIn("Computer Science" ,self.api.getMajors())
 
 if __name__ == "__main__":
     unittest.main() # run all tests
