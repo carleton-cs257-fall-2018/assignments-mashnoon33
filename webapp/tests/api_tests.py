@@ -6,7 +6,7 @@
 '''
 
 import unittest
-from api import api
+from ../api import api
 
 class testAPI(unittest.TestCase):
     def setUp(self):
@@ -143,6 +143,7 @@ class testAPI(unittest.TestCase):
         "FIRST_GEN" :0.162393162 ,
         "COUNT_WNE_INDEP0_INC1_P10" :21
         }
+
     def test_search_with_name(self):
         self.assertIn(self.carleton ,self.api.name("Carleton"))
 
