@@ -21,15 +21,20 @@ def hello():
 
 @app.route('/schools/',methods=['GET'])
 def schools():
-    callback  = run.getSchools(
-    ast.literal_eval(request.args.get('adm_rate')),
-    ast.literal_eval(request.args.get('sat_avg')),
-    ast.literal_eval(request.args.get('region_id')),
-    ast.literal_eval(request.args.get('ACTCMMID'.lower())),
-    ast.literal_eval(request.args.get('md_earn_wne_p10')),
-    ast.literal_eval(request.args.get('COSTT4_A'.lower()))
-    )
-    return(json.dumps(callback, indent=4))
+    try:
+        callback  = run.getSchools(
+        ast.literal_eval(request.args.get('adm_rate')),
+        ast.literal_eval(request.args.get('sat_avg')),
+        ast.literal_eval(request.args.get('region_id')),
+        ast.literal_eval(request.args.get('ACTCMMID'.lower())),
+        ast.literal_eval(request.args.get('md_earn_wne_p10')),
+        ast.literal_eval(request.args.get('COSTT4_A'.lower()))
+        )
+        return(json.dumps(callback, indent=4))
+    except Exception as e:
+        print(e)
+        return("Wrong query. Check the API doc because the example is too long")
+
 
 @app.route('/school/',methods=['GET'])
 def school():
