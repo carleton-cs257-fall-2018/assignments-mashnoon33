@@ -111,7 +111,7 @@ class api:
 
         except Exception as e:
             print(e)
-            exit()
+            return None
 
     def getSchoolsByName(self,name):
         try:
@@ -140,7 +140,7 @@ class api:
 
         except Exception as e:
             print(e)
-            exit()
+            return None
 
     def getStates(self):
         try:
@@ -161,7 +161,8 @@ class api:
 
         except Exception as e:
             print(e)
-            exit()
+            return None
+
 
 
 
@@ -190,7 +191,7 @@ class api:
 
         except Exception as e:
             print(e)
-            exit()
+            return None
 
 if __name__ == '__main__':
 
