@@ -49,6 +49,16 @@ def schoolsByName():
         print(e)
         return("Wrong query. Check the console log. \nExcepted structure : /schools/name/?name=[insertNameHere]")
 
+@app.route('/states/', methods=['GET'])
+def states():
+    try:
+        return(json.dumps(run.getStates(), indent=4))
+    except Exception as e:
+        print(e)
+        return("Contact your sys admin")
+
+# TODO: implement /major and /regions and also enum.
+
 
 class api:
     def connect(self):
@@ -62,7 +72,7 @@ class api:
         try:
             cursor = self.connection.cursor()
             query =f'''
-            SELECT INSTNM, CITY, STABBR, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
+            SELECT name, CITY, state, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
             FROM schools
             WHERE adm_rate >= {adm_rate[0]}
             AND adm_rate <= {adm_rate[1]}
@@ -81,7 +91,7 @@ class api:
             answer = []
 
             # header = [field[0] for field in cursor.description]
-            header = ['instnm', 'city', 'stabbr', 'opeid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
+            header = ['name', 'city', 'state', 'opeid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
             body = []
 
             for row in cursor:
@@ -102,15 +112,15 @@ class api:
         try:
             cursor = self.connection.cursor()
             query =f'''
-            SELECT INSTNM, CITY, STABBR, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
+            SELECT name, CITY, state, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
             FROM schools
-            WHERE INSTNM ilike '%{name}%'
+            WHERE name ilike '%{name}%'
             '''
 
             cursor.execute(query)
             answer = []
             # header = [field[0] for field in cursor.description]
-            header = ['instnm', 'city', 'stabbr', 'opeid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
+            header = ['name', 'city', 'state', 'opeid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
             body = []
 
             for row in cursor:
@@ -121,6 +131,27 @@ class api:
                 for i in range(0, len(header)):
                     school_dict[header[i]] = school[i]
                 answer.append(school_dict)
+            return answer
+
+        except Exception as e:
+            print(e)
+            exit()
+
+    def getStates(self):
+        try:
+            cursor = self.connection.cursor()
+            query =f'''
+            SELECT name
+            FROM states
+            '''
+
+            cursor.execute(query)
+            answer = []
+            # header = [field[0] for field in cursor.description]
+
+            for row in cursor:
+                answer.append(row[0])
+
             return answer
 
         except Exception as e:
