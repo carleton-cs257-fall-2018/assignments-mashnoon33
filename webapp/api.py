@@ -63,6 +63,8 @@ def states():
         return("Contact your sys admin")
 
 # TODO: implement /major and /regions and also enum.
+# TODO: Add sort
+# TODO: Refactor usign jeffs example
 
 
 class api:
@@ -76,7 +78,7 @@ class api:
     def getSchools(self,adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[0,36], md_earn_wne_p10=[0,200000], COSTT4_A=[0,100000]):
         try:
             cursor = self.connection.cursor()
-            query =f'''
+            query = f'''
             SELECT name, CITY, state, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
             FROM schools
             WHERE adm_rate >= {adm_rate[0]}
@@ -111,7 +113,7 @@ class api:
 
         except Exception as e:
             print(e)
-            return None
+            return Nonec
 
     def getSchoolsByName(self,name):
         try:
@@ -146,16 +148,22 @@ class api:
         try:
             cursor = self.connection.cursor()
             query =f'''
-            SELECT name
+            SELECT name, abbr
             FROM states
             '''
 
             cursor.execute(query)
-            answer = []
+            answer = {}
+            answer["sucess"] = True
+            answer["results"] = []
             # header = [field[0] for field in cursor.description]
 
             for row in cursor:
-                answer.append(row[0])
+                td = {}
+                td["value"]= row[1]
+                td["name"]= row[0]
+                td["text"]= row[0]
+                answer["results"].append(td)
 
             return answer
 
@@ -163,13 +171,8 @@ class api:
             print(e)
             return None
 
-
-
-
-
     def shutdown(self):
         self.connection.close()
-
 
     def getSchool(self, opeid):
         try:
