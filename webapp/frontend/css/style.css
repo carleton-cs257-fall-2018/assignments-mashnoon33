@@ -1,8 +1,32 @@
+.dropdown {
+  text-align: center;
+}
+
+
+h1 {
+    text-align: center;
+    color: #1d4537;
+}
+
+.yourDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+    margin: 10px;
+}
+
+.dropdown {
+  width: 100%;
+}
+
 .pushable > .ui.fixed.menu {
   padding-left: 260px;
 }
 
 .pushable > .ui.main.container {
-  padding-left: 260px;
-  padding-top: 40px;
+  padding-right: 300px;
+  padding-left: 20px;
+  padding-top: 50px;
 }

@@ -1,29 +1,75 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css" rel="stylesheet"/>
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<!DOCTYPE html>
 
-<div class="pushable">
-  <div class="ui visible left vertical menu sidebar overlay">
-    <div class="header item">Logo/Company Name</div>
-    <a href="#" class="item">Link #1</a>
-    <a href="#" class="item">Link #2</a>
-    <a href="#" class="item">Link #3</a>
-  </div>
-  <div class="ui top fixed menu">
-    <div class="ui fluid container">
-      <div class="left menu">
-        <a href="#" class="item">Menu #1</a>
-        <a href="#" class="item">Menu #2</a>
+<head>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#23B946">
+
+
+  <title>College Link</title>
+
+  <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/range.css">
+
+</head>
+
+<body>
+
+  <div class="pushable">
+
+  <div class="ui bottom attached segment">
+    <div class="ui visible left inline vertical segment sidebar menu">
+      <a class="item">
+        <h2>College Link</h2>
+      </a>
+
+      <div class="yourDiv">
+        <div class="ui segment search multiple selection  dropdown second" id="sar">
+          <input name="second" type="hidden">
+          <i class="dropdown icon"></i>
+          <div class="default text">States</div>
+
+        </div>
       </div>
-      <div class="right menu">
-        <a href="#" class="item">Menu #3</a>
-        <a href="#" class="item">Menu #4</a>
+      <div class="yourDiv">
+        <div class="ui range" id="my-range"></div>
+        <p>AVG SAT Score: <span id="display-3"></span></p>
+
       </div>
+
+    </div>
+  <div class="ui main fluid container pusher">
+
+      <table class="ui selectable table" id="results">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Acceptance</th>
+          <th>SAT</th>
+          <th>ACT</th>
+          <th>Tuition</th>
+          <th>Mid Career Income</th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+      </tbody>
+    </table>
+
+
     </div>
   </div>
-  <div class="ui main fluid container pusher">
-    <h1 class="ui header">Content</h1>
-    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way. When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then </p>
-  </div>
+
+
 </div>
+
+  <script src="js/jquery-3.2.1.js"></script>
+  <script src="js/semantic.js"></script>
+  <script src="js/range.js"></script>
+  <script src="js/scripts.js"></script>
+
+</body>

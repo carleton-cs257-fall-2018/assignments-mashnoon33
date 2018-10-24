@@ -1,3 +1,6 @@
+var cat = [""]
+
+
 $('.ui.sidebar').sidebar({
     context: $('.bottom.segment')
   })
@@ -13,8 +16,7 @@ var sel = $('.ui.dropdown.second')
 async function loadJsons() {
 sel.dropdown({
     apiSettings: {
-        url: 'states.json',
-
+        url: 'http://localhost:8080/states/',
     },
     filterRemoteData: true,
     onChange: function(value, text, $selectedItem) {
@@ -23,7 +25,32 @@ sel.dropdown({
         que = value.split(',');
     }
 });
+
+$.getJSON("http://localhost:8080/schools/?adm_rate=%5B.10,.30%5D&sat_avg=%5B1200,1500%5D&md_earn_wne_p10=%5B0,200000%5D&region_id=None&actcmmid=%5B30,36%5D&costt4_a=%5B0,70000%5D", function(data) {
+    cat = data
+    var table = document.getElementById("results");
+    for (item of data) {
+      console.log(table.rows.length);
+      var row = table.insertRow(table.rows.length);
+      row.insertCell(0).innerHTML = item["name"]
+      row.insertCell(1).innerHTML = item["city"]+ ", " +item["state"]
+      row.insertCell(2).innerHTML = Math.round(item["adm_rate"]*100) + "%"
+      row.insertCell(3).innerHTML = item["sat_avg"]
+      row.insertCell(4).innerHTML = item["actcmmid"]
+      row.insertCell(5).innerHTML = item["costt4_a"]
+      row.insertCell(6).innerHTML = item["md_earn_wne_p10"]
+    }
+
+
+   });
+
+
 }
+
+
+
+
+
 
 
 $(document).ready(function() {
