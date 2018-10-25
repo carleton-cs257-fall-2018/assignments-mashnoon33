@@ -151,11 +151,12 @@ def getSchools(adm_rate, sat_avg, region_id, ACTCMMID, md_earn_wne_p10, COSTT4_A
         AND COSTT4_A <={}
         AND adm_rate >= {}
         AND adm_rate <= {}
-        '''.format(adm_rate[0],adm_rate[1],sat_avg[0],sat_avg[1],
+        '''.format(sat_avg[0],sat_avg[1],
          md_earn_wne_p10[0], md_earn_wne_p10[1],ACTCMMID[0], ACTCMMID[1],
-         COSTT4_A[0],COSTT4_A[1] )
+         COSTT4_A[0],COSTT4_A[1], adm_rate[0],adm_rate[1] )
         if region_id:
             query+= "\n AND region_id = " + str(region_id)
+        query += "\nORDER BY adm_rate ASC"
         cursor.execute(query)
         answer = []
         # header = [field[0] for field in cursor.description]
