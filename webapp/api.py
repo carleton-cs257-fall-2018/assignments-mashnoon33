@@ -17,20 +17,55 @@ app = flask.Flask(__name__, static_folder='static')
 
 @app.after_request
 def after_request(response):
+ '''
+ Allows cross domain origins by adding the appropriate headers to the responses
+ '''
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   return response
 
-
-
 @app.route('/')
 def hello():
+    '''
+    Generic response for the home page
+    '''
     print("hello")
     return('Youve reached the home of the APIIII')
 
 @app.route('/schools/',methods=['GET'])
 def schools():
+    '''
+    Filter the list of schools using the query parameters. At any moment, multiple
+    parameters are going to be used.
+
+    RESPONSE: a list of 20 schools with the following details :
+              * name
+              * location
+              * acceptance rate
+              * SAT
+              * ACT
+              * Yearly Tuition
+              * Diversity
+              * Mid Career Income
+              * SERIAL/ 8 digit unique id (OPEID)
+
+    GET Parameters :
+    Parameters  |   Required   |          Valid Options          |   DEFAULT    |     DESCRIPTION
+    ------------------------------------------------------------------------------
+    type                y            public, private, all (TXT)       all
+    degree              y                 2, 4, all (TXT)            all           2 year or 4 year colleges
+    majors              n               see MAJOR_LIST (TXT)         all
+    region_id           n              see REGION_ID_LIST (INT)      all
+    SAT_AVG             y                   200 - 1600 (INT ARR)    [800-1600]      AVG SAT score
+    ACTCMMID            y                    0-36 (INT ARR)         [15-34]          ACT midpoint
+    COSTT4_A            y                 0 - 100,000 (INT ARR)   [0 - 100,000]     Avg Cost of attendace
+    MD_EARN_WNE_P9      y                 0 - 300,000 (INT ARR)   [0 - 300,000]      Median earning after 9 yrs
+    ADM_RATE            y                  0 - 1  (INT ARR)         [0 - 1]         Admission rate in decimals
+    page                y                 1 - 1000 (INT)                1           Number of page to display
+
+    '''
+    # TODO: (Optional) implement majors as a search query
     try:
         response  = getSchools(
         ast.literal_eval(request.args.get('adm_rate')),
@@ -48,6 +83,9 @@ def schools():
 
 @app.route('/school/',methods=['GET'])
 def school():
+'''
+Returns detailed profile of a singular college provided the 8 digit OPID
+'''
     try:
         response = getSchool(int(request.args.get('opeid')))
         return(json.dumps(response, indent=4))
@@ -57,6 +95,9 @@ def school():
 
 @app.route('/schools/name/',methods=['GET'])
 def schoolsByName():
+'''
+Filter the list of schools using the name parameter. Ignores other parameter. The result is similar to /schools
+'''
     try:
         response = getSchoolsByName(str(request.args.get('name')))
         return(json.dumps(response, indent=4))
@@ -73,8 +114,7 @@ def states():
         return("Contact your sys admin")
 
 # TODO: implement /major and /regions and also enum.
-# TODO: Add sort
-# TODO: Refactor usign jeffs example
+# TODO: Add sort (?) Looks good as is
 
 
 def getConnectection():
@@ -90,16 +130,18 @@ def getConnectection():
         exit()
     return connection
 
-def getSchools(adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[0,36], md_earn_wne_p10=[0,200000], COSTT4_A=[0,100000]):
+def getSchools(adm_rate, sat_avg, region_id=None, ACTCMMID, md_earn_wne_p10, COSTT4_A):
+    '''
+    Is called by /schools/ endpoint. Uses psycopg2 to run the command appropriate sql
+    query and returns the result as an array of dicts.
+    '''
     try:
         connection = getConnectection()
         cursor = connection.cursor()
         query = '''
         SELECT name, CITY, state, OPEID, ACTCMMID, ADM_RATE,  SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10, insturl
         FROM schools
-        WHERE adm_rate >= {}
-        AND adm_rate <= {}
-        AND sat_avg >= {}
+        WHERE sat_avg >= {}
         AND sat_avg <={}
         AND md_earn_wne_p10 >= {}
         AND md_earn_wne_p10 <= {}
@@ -107,6 +149,8 @@ def getSchools(adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[
         AND ACTCMMID <={}
         AND COSTT4_A >= {}
         AND COSTT4_A <={}
+        AND adm_rate >= {}
+        AND adm_rate <= {}
         '''.format(adm_rate[0],adm_rate[1],sat_avg[0],sat_avg[1],
          md_earn_wne_p10[0], md_earn_wne_p10[1],ACTCMMID[0], ACTCMMID[1],
          COSTT4_A[0],COSTT4_A[1] )
@@ -114,16 +158,14 @@ def getSchools(adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[
             query+= "\n AND region_id = " + str(region_id)
         cursor.execute(query)
         answer = []
-
         # header = [field[0] for field in cursor.description]
         header = ['name', 'city', 'state', 'opeid', 'actcmmid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10', 'insturl']
         body = []
 
-
-
         for row in cursor:
             body.append(row)
 
+        # Generates the dics using the provided headers.
         for school in body:
             school_dict = {}
             for i in range(0, len(header)):
@@ -135,9 +177,13 @@ def getSchools(adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[
     except Exception as e:
         print(e)
         connection.close()
-        return Nonec
+        return None
 
 def getSchoolsByName(name):
+    '''
+    Is called by /schools/name endpoint. Uses psycopg2 to run the command appropriate sql
+    query and returns the result as an array of dicts.
+    '''
     try:
         connection = getConnectection()
         cursor = connection.cursor()
@@ -170,6 +216,11 @@ def getSchoolsByName(name):
         return None
 
 def getStates():
+    '''
+    Is called by /staets endpoint. Uses psycopg2 to run the command appropriate sql
+    query and returns the result as a specially formatted dictionary designed to cater
+    to Semantic UI Framework's dropdown.
+    '''
     try:
         connection = getConnectection()
         cursor = connection.cursor()
@@ -200,6 +251,10 @@ def getStates():
 
 
 def getSchool(opeid):
+    '''
+    Is called by /school endpoint. Uses psycopg2 to run the command appropriate sql
+    query and returns the result as a dict.
+    '''
     try:
         connection = getConnectection()
         cursor = connection.cursor()
@@ -211,7 +266,7 @@ def getSchool(opeid):
         cursor.execute(query)
         header = [field[0] for field in cursor.description]
         body = [row for row in cursor]
-
+        # Generates the dict, matching the header with the data
         for school in body:
             school_dict = {}
             for i in range(0, len(header)):
@@ -226,7 +281,6 @@ def getSchool(opeid):
 
 
 if __name__ == '__main__':
-
     if len(sys.argv) != 3:
         print('Usage: {0} host port'.format(sys.argv[0]))
         print('  Example: {0} perlman.mathcs.carleton.edu 5101'.format(sys.argv[0]))
