@@ -15,13 +15,13 @@ from urllib.parse import urlparse, parse_qs
 
 app = flask.Flask(__name__, static_folder='static')
 
+
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   return response
-
 
 
 @app.route('/')
@@ -94,33 +94,28 @@ def getSchools(adm_rate=[0, 1], sat_avg=[1000, 1600], region_id=None, ACTCMMID=[
     try:
         connection = getConnectection()
         cursor = connection.cursor()
-        query = '''
-        SELECT name, CITY, state, OPEID, ACTCMMID, ADM_RATE,  SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10, insturl
+        query = f'''
+        SELECT name, CITY, state, OPEID, ADM_RATE,actcmmid, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
         FROM schools
-        WHERE adm_rate >= {}
-        AND adm_rate <= {}
-        AND sat_avg >= {}
-        AND sat_avg <={}
-        AND md_earn_wne_p10 >= {}
-        AND md_earn_wne_p10 <= {}
-        AND ACTCMMID >= {}
-        AND ACTCMMID <={}
-        AND COSTT4_A >= {}
-        AND COSTT4_A <={}
-        '''.format(adm_rate[0],adm_rate[1],sat_avg[0],sat_avg[1],
-         md_earn_wne_p10[0], md_earn_wne_p10[1],ACTCMMID[0], ACTCMMID[1],
-         COSTT4_A[0],COSTT4_A[1] )
+        WHERE adm_rate >= {adm_rate[0]}
+        AND adm_rate <= {adm_rate[1]}
+        AND sat_avg >= {sat_avg[0]}
+        AND sat_avg <={sat_avg[1]}
+        AND md_earn_wne_p10 >= {md_earn_wne_p10[0]}
+        AND md_earn_wne_p10 <= {md_earn_wne_p10[1]}
+        AND ACTCMMID >= {ACTCMMID[0]}
+        AND ACTCMMID <={ACTCMMID[1]}
+        AND COSTT4_A >= {COSTT4_A[0]}
+        AND COSTT4_A <={COSTT4_A[1]}
+        '''
         if region_id:
             query+= "\n AND region_id = " + str(region_id)
         cursor.execute(query)
         answer = []
 
         # header = [field[0] for field in cursor.description]
-        header = ['name', 'city', 'state', 'opeid', 'actcmmid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10', 'insturl']
+        header = ['name', 'city', 'state', 'opeid', 'adm_rate','actcmmid', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
         body = []
-
-
-
         for row in cursor:
             body.append(row)
 
@@ -141,11 +136,11 @@ def getSchoolsByName(name):
     try:
         connection = getConnectection()
         cursor = connection.cursor()
-        query ='''
+        query =f'''
         SELECT name, CITY, state, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
         FROM schools
-        WHERE name ilike '%{}%'
-        '''.format(name)
+        WHERE name ilike '%{name}%'
+        '''
 
         cursor.execute(query)
         answer = []
@@ -173,7 +168,7 @@ def getStates():
     try:
         connection = getConnectection()
         cursor = connection.cursor()
-        query ='''
+        query =f'''
         SELECT name, abbr
         FROM states
         '''
@@ -203,11 +198,11 @@ def getSchool(opeid):
     try:
         connection = getConnectection()
         cursor = connection.cursor()
-        query ='''
+        query =f'''
         SELECT *
         FROM schools
-        WHERE opeid = {}
-        '''.format(opeid)
+        WHERE opeid = {opeid}
+        '''
         cursor.execute(query)
         header = [field[0] for field in cursor.description]
         body = [row for row in cursor]
@@ -223,7 +218,6 @@ def getSchool(opeid):
         connection.close()
         print(e)
         return None
-
 
 if __name__ == '__main__':
 

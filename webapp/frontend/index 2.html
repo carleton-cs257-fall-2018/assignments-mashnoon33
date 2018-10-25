@@ -26,9 +26,9 @@
       </a>
   <div class="yourDiv">
       <div class="ui  buttons">
-  <button class="ui active positive button">4 Year</button>
+  <button class="ui positive button">4 Year</button>
   <div class="or"></div>
-  <button class="ui  button">2 Year</button>
+  <button class="ui positive button">2 Year</button>
   <div class="or"></div>
   <button class="ui  button">All</button>
 
@@ -37,9 +37,9 @@
 
 <div class="yourDiv">
     <div class="ui  buttons">
-<button class="ui  button">Public</button>
+<button class="ui positive button">Public</button>
 <div class="or"></div>
-<button class="ui positive active button">Private</button>
+<button class="ui positive button">Private</button>
 <div class="or"></div>
 <button class="ui  button">All</button>
 
@@ -54,34 +54,33 @@
         </div>
       </div>
       <div class="yourDiv">
-        <p>SAT Composite: <span id="sat_score"></span></p>
         <div class="ui double range" id="sat"></div>
+        <p>SAT Composite: <span id="sat_score"></span></p>
       </div>
 
       <div class="yourDiv">
-          <p>ACT Composite: <span id="act_score"></span></p>
         <div class="ui double range" id="act"></div>
+        <p>ACT Composite: <span id="act_score"></span></p>
       </div>
 
       <div class="yourDiv">
-            <p>Net Cost: <span id="act_score"></span></p>
         <div class="ui double range" id="cost"></div>
-
+        <p>Net Cost: <span id="act_score"></span></p>
       </div>
 
       <div class="yourDiv">
-          <p>Mid Career Salary: <span id="act_score"></span></p>
         <div class="ui double range" id="salary"></div>
-
+        <p>Mid Career Salary: <span id="act_score"></span></p>
       </div>
 
       <div class="yourDiv">
-        <p >Selectiveness: <span id="act_score"></span></p>
         <div class="ui double range" id="selective"></div>
+        <p >Selectiveness: <span id="act_score"></span></p>
       </div>
 
       <div class="yourDiv">
-      <button class="positive ui button">Search</button>
+
+      <button class="positive ui button">Positive Button</button>
     </div>
 
 
@@ -89,60 +88,25 @@
     </div>
   <div class="ui main fluid container pusher">
 
-      <table class="ui selectable table" >
+      <table class="ui selectable table" id="results">
       <thead>
         <tr>
-          <th>  </th>
           <th>Name</th>
           <th>Location</th>
           <th>Acceptance</th>
           <th>SAT</th>
           <th>ACT</th>
           <th>Tuition</th>
-          <th>Income</th>
-          <th>  </th>
+          <th>Mid Career Income</th>
+          <th>    </th>
+
         </tr>
       </thead>
-
-      <tbody id="results">
+      <tbody>
 
 
       </tbody>
-    </div>
     </table>
-
-
-    <div class="ui modal">
-       <i class="close icon"></i>
-      <div class="scrolling content" id="content">
-
-        <div class="ui celled grid">
-          <div class="row">
-            <div class="three wide column">
-              <img src = "https://logo.clearbit.com/carleton.edu">
-            </div>
-            <div class="thirteen wide column">
-              <p></p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="three wide column">
-              <img>
-            </div>
-            <div class="ten wide column">
-              <p></p>
-            </div>
-            <div class="three wide column">
-              <img>
-            </div>
-          </div>
-        </div>
-
-
-
-      </div>
-    </div>
-
 
 
     </div>
@@ -150,8 +114,6 @@
 
 
 </div>
-
-
 
   <script src="js/jquery-3.2.1.js"></script>
   <script src="https://rawgit.com/gdaunton/Semantic-UI/range-slider-build/dist/semantic.js"></script>

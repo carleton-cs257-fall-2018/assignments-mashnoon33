@@ -17,12 +17,17 @@ h1 {
     margin: 10px;
 }
 
+
 .dropdown {
   width: 100%;
 }
 
 .pushable > .ui.fixed.menu {
   padding-left: 260px;
+}
+
+.header {
+  font-size:  30px;
 }
 
 .pushable > .ui.main.container {
