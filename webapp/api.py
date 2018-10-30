@@ -53,8 +53,8 @@ def schools():
     GET Parameters :
     Parameters  |   Required   |          Valid Options          |   DEFAULT    |     DESCRIPTION
     ------------------------------------------------------------------------------
-    type                y            public, private, all (TXT)       all
-    degree              y                 2, 4, all (TXT)            all           2 year or 4 year colleges
+    ownership           y            public(1), private(2), all (TXT)       all
+    degree              y                 2(1), 4(2), grad(3), all (TXT)            all           2 year or 4 year colleges
     majors              n               see MAJOR_LIST (TXT)         all
     region_id           n              see REGION_ID_LIST (INT)      all
     SAT_AVG             y                   200 - 1600 (INT ARR)    [800-1600]      AVG SAT score
@@ -63,7 +63,6 @@ def schools():
     MD_EARN_WNE_P9      y                 0 - 300,000 (INT ARR)   [0 - 300,000]      Median earning after 9 yrs
     ADM_RATE            y                  0 - 1  (INT ARR)         [0 - 1]         Admission rate in decimals
     page                y                 1 - 1000 (INT)                1           Number of page to display
-
     '''
     # TODO: (Optional) implement majors as a search query
     try:
@@ -73,7 +72,9 @@ def schools():
         ast.literal_eval(request.args.get('region_id')),
         ast.literal_eval(request.args.get('ACTCMMID'.lower())),
         ast.literal_eval(request.args.get('md_earn_wne_p10')),
-        ast.literal_eval(request.args.get('COSTT4_A'.lower()))
+        ast.literal_eval(request.args.get('COSTT4_A'.lower())),
+        ast.literal_eval(request.args.get('owner')),
+        ast.literal_eval(request.args.get('degree'))
         )
         return(json.dumps(response, indent=4))
     except Exception as e:
@@ -93,13 +94,13 @@ def school():
         print(e)
         return("Wrong query. Check the console log. \nExcepted structure : /school/?opeid=[insertOpeidHere]")
 
-@app.route('/schools/name/',methods=['GET'])
-def schoolsByName():
+@app.route('/schools/name/<name>')
+def schoolsByName(name):
     '''
     Filter the list of schools using the name parameter. Ignores other parameter. The result is similar to /schools
     '''
     try:
-        response = getSchoolsByName(str(request.args.get('name')))
+        response = getSchoolsByName(str(name))
         return(json.dumps(response, indent=4))
     except Exception as e:
         print(e)
@@ -117,6 +118,14 @@ def states():
 # TODO: Add sort (?) Looks good as is
 
 
+@app.route('/regions/', methods=['GET'])
+def regions():
+    try:
+        return(json.dumps(getRegions(), indent=4))
+    except Exception as e:
+        print(e)
+        return("Contact your sys admin")
+
 def getConnectection():
     '''
     Returns a connection to the database described
@@ -130,7 +139,7 @@ def getConnectection():
         exit()
     return connection
 
-def getSchools(adm_rate, sat_avg, region_id, ACTCMMID, md_earn_wne_p10, COSTT4_A):
+def getSchools(adm_rate, sat_avg, region_id, ACTCMMID, md_earn_wne_p10, COSTT4_A, ownership, degree):
     '''
     Is called by /schools/ endpoint. Uses psycopg2 to run the command appropriate sql
     query and returns the result as an array of dicts.
@@ -139,7 +148,7 @@ def getSchools(adm_rate, sat_avg, region_id, ACTCMMID, md_earn_wne_p10, COSTT4_A
         connection = getConnectection()
         cursor = connection.cursor()
         query = '''
-        SELECT name, CITY, state, OPEID, ACTCMMID, ADM_RATE,  SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10, insturl
+        SELECT name, CITY, state, OPEID, ACTCMMID, ADM_RATE,  SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10, insturl, degree, owner
         FROM schools
         WHERE sat_avg >= {}
         AND sat_avg <={}
@@ -153,14 +162,18 @@ def getSchools(adm_rate, sat_avg, region_id, ACTCMMID, md_earn_wne_p10, COSTT4_A
         AND adm_rate <= {}
         '''.format(sat_avg[0],sat_avg[1],
          md_earn_wne_p10[0], md_earn_wne_p10[1],ACTCMMID[0], ACTCMMID[1],
-         COSTT4_A[0],COSTT4_A[1], adm_rate[0],adm_rate[1] )
+         COSTT4_A[0],COSTT4_A[1], adm_rate[0],adm_rate[1])
         if region_id:
             query+= "\n AND region_id = " + str(region_id)
+        if degree:
+            query+= "\n AND degree <= " + str(degree)
+        if ownership:
+            query+= "\n AND owner = " + str(ownership)
         query += "\nORDER BY adm_rate ASC"
         cursor.execute(query)
         answer = []
         # header = [field[0] for field in cursor.description]
-        header = ['name', 'city', 'state', 'opeid', 'actcmmid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10', 'insturl']
+        header = ['name', 'city', 'state', 'opeid', 'actcmmid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10', 'insturl', 'degree', 'owner']
         body = []
 
         for row in cursor:
@@ -189,7 +202,7 @@ def getSchoolsByName(name):
         connection = getConnectection()
         cursor = connection.cursor()
         query ='''
-        SELECT name, CITY, state, OPEID, ADM_RATE, SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10
+        SELECT name, CITY, state, OPEID, ACTCMMID, ADM_RATE,  SAT_AVG, UGDS_WHITE, COSTT4_A, MD_EARN_WNE_P10, insturl, degree, owner
         FROM schools
         WHERE name ilike '%{}%'
         '''.format(name)
@@ -197,7 +210,7 @@ def getSchoolsByName(name):
         cursor.execute(query)
         answer = []
         # header = [field[0] for field in cursor.description]
-        header = ['name', 'city', 'state', 'opeid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10']
+        header = ['name', 'city', 'state', 'opeid', 'actcmmid', 'adm_rate', 'sat_avg', 'ugds_white', 'costt4_a', 'md_earn_wne_p10', 'insturl', 'degree', 'owner']
         body = []
 
         for row in cursor:
@@ -250,6 +263,40 @@ def getStates():
         connection.close()
         return None
 
+
+def getRegions():
+    '''
+    Is called by /staets endpoint. Uses psycopg2 to run the command appropriate sql
+    query and returns the result as a specially formatted dictionary designed to cater
+    to Semantic UI Framework's dropdown.
+    '''
+    try:
+        connection = getConnectection()
+        cursor = connection.cursor()
+        query ='''
+        SELECT id, name
+        FROM region
+        '''
+
+        cursor.execute(query)
+        answer = {}
+        answer["sucess"] = True
+        answer["results"] = []
+        # header = [field[0] for field in cursor.description]
+
+        for row in cursor:
+            td = {}
+            td["value"]= row[0]
+            td["name"]= row[1]
+            td["text"]= row[1]
+            answer["results"].append(td)
+        connection.close()
+        return answer
+
+    except Exception as e:
+        print(e)
+        connection.close()
+        return None
 
 def getSchool(opeid):
     '''
