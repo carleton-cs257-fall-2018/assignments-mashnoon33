@@ -177,6 +177,14 @@ function dynamicEvent() {
         $("#location").text(data["city"] + ", " + data["state"])
         $("#adm_rate").text(Math.round(data["adm_rate"] * 100) + "% Acceptance Rate")
 
+        // destroy previous stuffs
+        var toDestroy = ["#sat_info", "#act_info", "#divr_info", "#major_info"]
+
+        for (item of toDestroy) {
+          $(item).empty()
+        }
+
+
         //fetches the modified dictionary definition
         $.getJSON(link2Dict, function(dict) {
             //fetches the divs to then populate
