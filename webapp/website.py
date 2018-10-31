@@ -1,3 +1,9 @@
+'''
+    website.py
+    Mash Ibtesum, October 23, 2018
+    Simple API to retrive data from the schools databse
+'''
+
 import sys
 import flask
 

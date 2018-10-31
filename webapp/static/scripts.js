@@ -10,8 +10,8 @@ var params = {
     degree: 3,
     owner: "None"
 }
-var p = "positive"
-var owner = ["#pub", "#priv", "#all"]
+var owner = ["#pub", "#priv", "#all"] // list of buttons
+var degree = ["#ass", "#bac", "#grad"]
 var table = document.getElementById("results");
 var dropdown = $('.ui.dropdown.second')
 
@@ -26,83 +26,85 @@ $('.ui.sidebar').sidebar({
 })
 
 
-
 /// TODO: CREATE A FUNCTION FOR DOING THE LOOPS
 
 // Initializes all the buttons
 $("#pub").on("click", function() {
-    if ($("#pub").hasClass(p)) {
+    if ($("#pub").hasClass("positive")) {
         $("#pub").toggleClass("positive")
         params.owner = null
     } else {
         for (item of owner) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#pub").toggleClass("positive")
+        prompt.val("")
         params.owner = 1
     }
 });
 
 $("#priv").on("click", function() {
-    if ($("#priv").hasClass(p)) {
+    if ($("#priv").hasClass("positive")) {
         $("#priv").toggleClass("positive")
         params.owner = null
     } else {
         for (item of owner) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#priv").toggleClass("positive")
+        prompt.val("")
         params.owner = 2
     }
 });
 
 $("#all").on("click", function() {
-    if ($("#all").hasClass(p)) {
+    if ($("#all").hasClass("positive")) {
         $("#all").toggleClass("positive")
     } else {
         for (item of owner) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#all").toggleClass("positive")
+        prompt.val("")
         params.owner = "None"
     }
 });
 
-degree = ["#ass", "#bac", "#grad"]
-
 $("#ass").on("click", function() {
-    if ($("#ass").hasClass(p)) {
+    if ($("#ass").hasClass("positive")) {
         $("#ass").toggleClass("positive")
         params.degree = null
     } else {
         for (item of degree) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#ass").toggleClass("positive")
+        prompt.val("")
         params.degree = 2
 
     }
 });
 
 $("#bac").on("click", function() {
-    if ($("#bac").hasClass(p)) {
+    if ($("#bac").hasClass("positive")) {
         $("#bac").toggleClass("positive")
         params.degree = null
     } else {
         for (item of degree) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#bac").toggleClass("positive")
+        prompt.val("")
         params.degree = 3
 
     }
@@ -110,16 +112,17 @@ $("#bac").on("click", function() {
 
 
 $("#grad").on("click", function() {
-    if ($("#grad").hasClass(p)) {
+    if ($("#grad").hasClass("positive")) {
         $("#grad").toggleClass("positive")
         params.degree = null
     } else {
         for (item of degree) {
-            if ($(item).hasClass(p)) {
+            if ($(item).hasClass("positive")) {
                 $(item).toggleClass("positive")
             }
         }
         $("#grad").toggleClass("positive")
+        prompt.val("")
         params.degree = 4
 
     }
@@ -135,9 +138,9 @@ $("#search").on("click", function() {
     } else if (params.owner == null) {
         alert("Select a Owndership before searching")
     } else if (prompt.val() != "") {
-        loadJsons_Name(prompt.val());
+        search_by_name(prompt.val());
     } else {
-        loadJsons();
+        search();
     }
 });
 
@@ -212,14 +215,14 @@ function dynamicEvent() {
 }
 
 
-async function loadJsons() {
+async function search() {
     $.getJSON("http://perlman.mathcs.carleton.edu:" + api_port + "/schools/?" + encodeGetParams(params), function(data) {
         populateResultTable(data)
     });
     $('table').tablesort()
 }
 
-async function loadJsons_Name(name) {
+async function search_by_name(name) {
     $.getJSON("http://perlman.mathcs.carleton.edu:" + api_port + "/schools/name/" + name, function(data) {
         populateResultTable(data)
     });
@@ -227,6 +230,7 @@ async function loadJsons_Name(name) {
 }
 
 function populateResultTable(data) {
+    // takes the json response and populates the table of results
     for (item of data) {
         var row = table.insertRow(table.rows.length);
         var x = row.insertCell(0);
@@ -247,11 +251,8 @@ function populateResultTable(data) {
         but.id = item["opeid"]
         y.appendChild(but);
         but.onclick = dynamicEvent;
-
     }
 }
-
-
 
 // Initialize the Ranges
 $('#sat').range({
