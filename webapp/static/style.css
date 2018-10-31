@@ -30,7 +30,7 @@ h1 {
   align-items: top;
 }
 
-p {
+.SidebarText {
   margin-left: 10px;
   margin-bottom: 5px;
   font-weight: bold;
