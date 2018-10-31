@@ -196,7 +196,12 @@ function dynamicEvent() {
             // loops through the JSON object and populates the modal with relevant information
             for (var key in data) {
                 if (key.includes("sat")) {
-                    field_sat.append("<p>" + dict[key.toUpperCase()] + " : " + data[key] + "</p>")
+                  if (data[key] != null) {
+                      var number = data[key]
+                  } else {
+                      var number = "Not found"
+                  }
+                    field_sat.append("<p>" + dict[key.toUpperCase()] + " : " +number + "</p>")
                 }
 
                 if (key.includes("act")) {
