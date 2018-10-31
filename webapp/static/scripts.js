@@ -130,6 +130,7 @@ $("#grad").on("click", function() {
 
 
 $("#search").on("click", function() {
+    $("#welcome").hide()
     $("#mytable").show()
     $("#mytable > tbody").html("");
 

@@ -10,6 +10,11 @@ h1 {
 
 #booody{
   background-color: #F4F0E7;
+  position:fixed
+}
+
+#welcome {
+  margin: 100px;
 }
 
 #searrchhh{
