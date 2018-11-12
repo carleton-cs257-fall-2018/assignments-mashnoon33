@@ -1,6 +1,6 @@
 '''
     config.py
 '''
-database = 'ibtesumm'
-user = 'ibtesumm'
-password = ''
+database = 'mashny'
+user = 'mashny'
+password = '123'
