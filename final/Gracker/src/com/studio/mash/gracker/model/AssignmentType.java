@@ -9,11 +9,13 @@ public class AssignmentType {
      */
     public String name;
     public Integer weight;
-    public ArrayList<Assignment> grades;
+    public ArrayList<Assignment> grades = new ArrayList<>();
 
-    public ArrayList<Assignment> getGrades() {
-        return grades;
+    public AssignmentType(String name, Integer weight){
+        this.name = name;
+        this.weight = weight;
     }
+
 
     public String getName() {
         return name;
@@ -30,10 +32,15 @@ public class AssignmentType {
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
-    public  void addGrade(String name, Integer grade) {
+    public  void addGrade(Assignment assignment) {
         /**
          * Adds grades ...
          */
+        grades.add(assignment);
+    }
 
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

@@ -1,18 +1,38 @@
 package com.studio.mash.gracker.model;
 
-public class Assignment {
+public class Assignment extends Gradable {
     /**
      * Individual assignments, the name and the grade
      */
     public String name;
-    public Integer grade;
-    public Assignment(){
-    }
-    public Assignment(String name, Integer grade){
+    public Float grade;
+    public String lg;
+    public AssignmentType type;
+
+    public Assignment(String name, Float grade, AssignmentType type){
+        this.lg=calc_lg(grade);
+        this.name=name;
+        this.grade=grade;
+        this.type=type;
+        type.addGrade(this);
 
     }
 
-    public Integer getGrade() {
+    public String getLg() {
+        return lg;
+    }
+
+    public void setLg(String lg) {
+        this.lg = lg;
+    }
+
+    public AssignmentType getType() {
+        return type;
+    }
+
+
+
+    public Float getGrade() {
         return grade;
     }
 
@@ -20,7 +40,7 @@ public class Assignment {
         return name;
     }
 
-    public void setGrade(Integer grade) {
+    public void setGrade(Float grade) {
         this.grade = grade;
     }
 

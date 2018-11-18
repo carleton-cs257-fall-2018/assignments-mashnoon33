@@ -12,30 +12,29 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class BaseView {
-    private Stage stage;
-    private EventHandler<? super MouseEvent> handler;
+    public Stage stage;
+    public BorderPane root;
 
     /**
      * Implements the top portion of the app that is present in both CourseView and DashBoard. It shows the GPA, AVG and Letter grade
      */
-    public BaseView(Stage stage, EventHandler handler) {
+    public BaseView(Stage stage) {
         if (stage == null) {
             throw new IllegalArgumentException("Stage cannot be null");
         }
-        if (handler == null) {
-            throw new IllegalArgumentException("Handler cannot be null");
-        }
+//        if (handler == null) {
+//            throw new IllegalArgumentException("Handler cannot be null");
+//        }
         this.stage = stage;
-        this.handler = handler; // there would be multiple event handler in a fleshed out app, maybe utilize an array later (?)
-
+//        this.handler = handler; // there would be multiple event handler in a fleshed out app, maybe utilize an array later (?)
+        root = new BorderPane();
     }
 
     public Scene getScene() {
         /**
          *  Serves as the base for all views. Generates common elements for all the views
          */
-        BorderPane root = new BorderPane();
-        return new Scene(root,  400, 600);
+        return new Scene(root,  340, 600);
     }
 
 

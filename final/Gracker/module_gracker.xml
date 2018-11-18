@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_gracker" default="compile.module.gracker">
+  <dirname property="module.gracker.basedir" file="${ant.file.module_gracker}"/>
+  
+  <property name="module.jdk.home.gracker" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.gracker" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.gracker" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.gracker" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
+  
+  <property name="gracker.output.dir" value="${module.gracker.basedir}/out/production/Gracker"/>
+  <property name="gracker.testoutput.dir" value="${module.gracker.basedir}/out/test/Gracker"/>
+  
+  <path id="gracker.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="gracker.module.production.classpath">
+    <path refid="${module.jdk.classpath.gracker}"/>
+  </path>
+  
+  <path id="gracker.runtime.production.module.classpath">
+    <pathelement location="${gracker.output.dir}"/>
+  </path>
+  
+  <path id="gracker.module.classpath">
+    <path refid="${module.jdk.classpath.gracker}"/>
+    <pathelement location="${gracker.output.dir}"/>
+  </path>
+  
+  <path id="gracker.runtime.module.classpath">
+    <pathelement location="${gracker.testoutput.dir}"/>
+    <pathelement location="${gracker.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.gracker">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.gracker">
+    <patternset refid="excluded.from.module.gracker"/>
+  </patternset>
+  
+  <path id="gracker.module.sourcepath">
+    <dirset dir="${module.gracker.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.gracker" depends="compile.module.gracker.production,compile.module.gracker.tests" description="Compile module Gracker"/>
+  
+  <target name="compile.module.gracker.production" depends="register.custom.compilers" description="Compile module Gracker; production classes">
+    <mkdir dir="${gracker.output.dir}"/>
+    <javac2 destdir="${gracker.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gracker}/javac">
+      <compilerarg line="${compiler.args.gracker}"/>
+      <bootclasspath refid="gracker.module.bootclasspath"/>
+      <classpath refid="gracker.module.production.classpath"/>
+      <src refid="gracker.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gracker"/>
+    </javac2>
+    
+    <copy todir="${gracker.output.dir}">
+      <fileset dir="${module.gracker.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.gracker.tests" depends="register.custom.compilers,compile.module.gracker.production" description="compile module Gracker; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.gracker" description="cleanup module">
+    <delete dir="${gracker.output.dir}"/>
+    <delete dir="${gracker.testoutput.dir}"/>
+  </target>
+</project>

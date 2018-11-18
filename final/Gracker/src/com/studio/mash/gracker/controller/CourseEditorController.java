@@ -1,12 +1,13 @@
 package com.studio.mash.gracker.controller;
 
+import com.studio.mash.gracker.model.CourseModel;
 import javafx.event.Event;
 import javafx.stage.Stage;
 
 public class CourseEditorController {
     private Stage stage;
 
-    public CourseEditorController(Stage stage) {
+    public CourseEditorController(Stage stage, CourseModel model) {
         if (stage == null) {
             throw new IllegalArgumentException("Stage cannot be null");
         }
