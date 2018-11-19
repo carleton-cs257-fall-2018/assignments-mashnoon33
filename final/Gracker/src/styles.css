@@ -1,0 +1,8 @@
+.tferror {
+    -fx-text-box-border: red ;
+    -fx-focus-color: red ;
+}
+
+.dialog-pane:header .header-panel  {
+    -fx-background-color: #fffd8e;
+}

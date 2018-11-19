@@ -1,39 +1,30 @@
 package com.studio.mash.gracker.view;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class BaseView {
+    /**
+     * Not necessary as the app evolved, will refactor it out, if time permits
+     */
     public Stage stage;
     public BorderPane root;
 
     /**
      * Implements the top portion of the app that is present in both CourseView and DashBoard. It shows the GPA, AVG and Letter grade
+     * @param stage
      */
     public BaseView(Stage stage) {
         if (stage == null) {
             throw new IllegalArgumentException("Stage cannot be null");
         }
-//        if (handler == null) {
-//            throw new IllegalArgumentException("Handler cannot be null");
-//        }
+//
         this.stage = stage;
-//        this.handler = handler; // there would be multiple event handler in a fleshed out app, maybe utilize an array later (?)
         root = new BorderPane();
     }
 
     public Scene getScene() {
-        /**
-         *  Serves as the base for all views. Generates common elements for all the views
-         */
         return new Scene(root,  340, 600);
     }
 

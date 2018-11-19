@@ -2,6 +2,12 @@
 JavaFX App : Gracker
 Creator : Mash Ibtesum
 
+Current Status :
+* Everything Works, there are some convenience features that aren't implemented, but doesn't hinder functionality. Those are marked by TODO comment tags in the code
+* I have used the Jackson library to serialize the data to be saved. The required .jar files are included in the folder called libraries
+* The app uses /Library/Application Support/ directory to store app data. It is hardcoded for Mac as of this readme as I do not have access or time to implement windows or linux
+* Some tableview Controller specific stuff resides in view classes because they don't work properly in the controller class when moved
+
 Gracker, a combination of the words grade and tracker, is an app that tracks
 grades of students. It allows user to add their classes and for each classes,
 wieght of different types of assignments and their grades for those assignments.

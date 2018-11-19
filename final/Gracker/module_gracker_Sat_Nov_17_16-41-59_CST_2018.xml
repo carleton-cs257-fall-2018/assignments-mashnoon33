@@ -17,24 +17,20 @@
   
   <path id="gracker.module.production.classpath">
     <path refid="${module.jdk.classpath.gracker}"/>
-    <path refid="library.jackson-all-1.7.3.classpath"/>
   </path>
   
   <path id="gracker.runtime.production.module.classpath">
     <pathelement location="${gracker.output.dir}"/>
-    <path refid="library.jackson-all-1.7.3.classpath"/>
   </path>
   
   <path id="gracker.module.classpath">
     <path refid="${module.jdk.classpath.gracker}"/>
     <pathelement location="${gracker.output.dir}"/>
-    <path refid="library.jackson-all-1.7.3.classpath"/>
   </path>
   
   <path id="gracker.runtime.module.classpath">
     <pathelement location="${gracker.testoutput.dir}"/>
     <pathelement location="${gracker.output.dir}"/>
-    <path refid="library.jackson-all-1.7.3.classpath"/>
   </path>
   
   

@@ -1,0 +1,8 @@
+.dialog-pane:header .header-panel  {
+    -fx-background-color: red;
+}
+
+.dialog-pane:header .header-panel .label  {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}

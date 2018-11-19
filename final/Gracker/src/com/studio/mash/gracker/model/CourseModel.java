@@ -1,62 +1,35 @@
 package com.studio.mash.gracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.codehaus.jackson.map.ObjectMapper;
 
-
-import java.io.File;
 import java.util.ArrayList;
 
+@JsonIgnoreProperties({ "tags" })
 public class CourseModel extends Gradable {
-
     public Float average;
     public Float gpa;
     public String letterGrade;
+    @JsonIgnore
     public ObservableList<Course> courses;
 
+    /**
+     * Takes no params
+     */
     public CourseModel() {
-        ObservableList<AssignmentType> typeList1 = FXCollections.observableArrayList(
-                new AssignmentType("Essay",40),
-                new AssignmentType("Project",50)
-        );
-//        ObservableList<AssignmentType> typeList2 = FXCollections.observableArrayList(
-//                new AssignmentType("Essay",40),
-//                new AssignmentType("Project",50)
-//        );
-        this.courses = FXCollections.observableArrayList(
-                new Course("Software Design",typeList1 )
-//                ,
-//                new Course("Experimental Photo", typeList2)
-        );
+        this.courses = FXCollections.observableArrayList();
         this.average=0f;
         this.gpa=0f;
         this.letterGrade="";
-
-
-
     }
 
-    public ObservableList<Course> getCourses() {
-        return courses;
-    }
 
-    public void setCourses(ObservableList<Course> courses) {
-        this.courses = courses;
-    }
-
-    public void calculate(ArrayList grades) {
-        /**
-         * Gathers all the grades, and then calls 3 helper methods to calculate in differnt formats
-         */
-        this.average=calculate_average();
-        this.gpa=calculate_gpa(grades);
-        this.letterGrade=calculateLetterGrade(grades);
-    }
-
-    public Float calculate_gpa(ArrayList grades){
-        return 0.00f;
-    }
+    /**
+     * Calculates the term average considering all courses
+     * @return term average grade
+     */
     public Float calculate_average(){
         Float sum = 0f;
         for (Course course: courses) {
@@ -64,15 +37,14 @@ public class CourseModel extends Gradable {
         }
         sum/=courses.size();
         return sum;
-
-    }
-    public String calculateLetterGrade(ArrayList grades){
-        return "";
-
     }
 
-    public void createClass() {
+    @JsonIgnore public ObservableList<Course> getCourses() {
+        return courses;
+    }
 
+    public void setCourses(ObservableList<Course> courses) {
+        this.courses = courses;
     }
 
     public Float getAverage() {
@@ -98,17 +70,5 @@ public class CourseModel extends Gradable {
     public void setLetterGrade(String letterGrade) {
         this.letterGrade = letterGrade;
     }
-
-    public void addGrade() {
-
-    }
-    public void modifyClass() {
-
-    }
-    public void modifyGrade() {
-
-    }
-
-
 
 }

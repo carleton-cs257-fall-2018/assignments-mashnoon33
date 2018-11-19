@@ -1,7 +1,5 @@
 package com.studio.mash.gracker.model;
 
-import java.util.ArrayList;
-
 public class AssignmentType {
     /**
      * AssignmentType would refer to different types of assignments, e.g: Essays, Quiz, Exams
@@ -9,13 +7,43 @@ public class AssignmentType {
      */
     public String name;
     public Integer weight;
-    public ArrayList<Assignment> grades = new ArrayList<>();
+    public Integer numOfAssignment;
 
+    /**
+     * Creates an assignment object
+     * @param name Name of the type of the assignment
+     * @param weight Weight in precentage, not decimal
+     */
     public AssignmentType(String name, Integer weight){
         this.name = name;
         this.weight = weight;
+        numOfAssignment=0;
+
     }
 
+    public  AssignmentType() {}
+
+    public Integer getNumOfAssignment() {
+        return numOfAssignment;
+    }
+
+    public void setNumOfAssignment(Integer numOfAssignment) {
+        this.numOfAssignment = numOfAssignment;
+    }
+
+    /**
+     * Increases the number of assignment by one for the respective catagory
+     */
+    public void addAss() {
+        this.numOfAssignment ++;
+    }
+
+    /**
+     * Decreases the number of assignment by one for the respective catagory
+     */
+    public void remAss() {
+        this.numOfAssignment --;
+    }
 
     public String getName() {
         return name;
@@ -31,12 +59,6 @@ public class AssignmentType {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
-    }
-    public  void addGrade(Assignment assignment) {
-        /**
-         * Adds grades ...
-         */
-        grades.add(assignment);
     }
 
     @Override

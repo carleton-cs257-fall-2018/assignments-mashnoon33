@@ -4,6 +4,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 
 public class XTableView extends TableView {
+    /**
+     * Custom Tableview Class to hide the column headers
+     */
     @Override
     public void resize(double width, double height) {
         super.resize(width, height);

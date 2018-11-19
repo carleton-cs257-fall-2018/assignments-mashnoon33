@@ -1,7 +1,6 @@
 package com.studio.mash.gracker.view;
 
 import com.studio.mash.gracker.model.Assignment;
-import com.studio.mash.gracker.model.AssignmentType;
 import com.studio.mash.gracker.model.Course;
 import com.studio.mash.gracker.model.CourseModel;
 import javafx.beans.binding.Bindings;
@@ -21,6 +20,7 @@ import javafx.stage.Stage;
 import com.studio.mash.gracker.controller.CourseController;
 import javafx.util.Callback;
 
+import java.text.DecimalFormat;
 import java.util.function.UnaryOperator;
 
 
@@ -34,34 +34,50 @@ public class CourseView extends BaseView {
     public Text lg_header;
     public Text courseName;
 
+    /**
+     * Utilizes tableview to display the assignments and respective grades, and textfield and buttons to add more stuffs
+     * or manitpulate
+     * @param stage
+     * @param course
+     * @param model
+     */
     public CourseView(Stage stage, Course course, CourseModel model){
-        /**
-         * Utilizes tableview to display the assignments and respective grades, and textfield and buttons to add more stuffs
-         * or manitpulate
-         */
-
         super(stage);
         this.controller=new CourseController(stage,model,this);
         this.model=model;
         this.course=course;
     }
 
-    public void parseCourse() {
-
-    }
-
+    /**
+     * Updates the grade summary view on top
+     */
     public void gradeSummary(){
-        avg_header.setText(course.getAverage().toString());
+        //Formats the decimals to 2 decimal points
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        avg_header.setText(df.format(course.getAverage()));
         lg_header.setText(course.getLetterGrade().toString());
     }
 
+    /**
+     * Updates the name of the course
+     */
     public  void  updateCourseName() {
+        /**
+         * Updates the coursename post editing the course
+         */
         this.courseName.setText(course.getName());
     }
 
+    /**
+     * Genereates each element and returns the scene
+     * @return a renderd scene
+     */
     @Override
     public Scene getScene() {
-        //TODO update coursname post update
+        //
+        // Genereates the Top portion of the scene - The name and grade summary
+        //
         courseName = new Text(course.getName());
         courseName.setFont(Font.font("Arial", 30));
         VBox header = new VBox();
@@ -88,37 +104,30 @@ public class CourseView extends BaseView {
         gradeSummary();
 
         root.setTop(header);
-        parseCourse();
 
+        //
+        // Generates the tableview
+        //
         table.setItems(course.assignments);
-
+        table.setPlaceholder(new Label("Add some assignment grades to get started \n\n If there are no types, press edit and add some"));
 //        table.setOnMousePressed(e -> this.controller.handleRowPress(e));
         table.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
         TableColumn assignmentColumn = new TableColumn("Assignment");
-        assignmentColumn.setCellValueFactory(
-                new PropertyValueFactory<>("name")
-        );
+        assignmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         assignmentColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 30 );
         TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("type")
-        );
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         typeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 );
-
         TableColumn avgGradeColumn = new TableColumn("Grade");
-        avgGradeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("grade")
-        );
+        avgGradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         avgGradeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 10 );
         TableColumn letterGradeColumn = new TableColumn("Letter Grade");
-        letterGradeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("lg")
-        );
+        letterGradeColumn.setCellValueFactory(new PropertyValueFactory<>("lg"));
         letterGradeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 );
 
-        // Make table cells editable, well certain columns
+        // TODO Make table cells editable, well certain columns -> For this release, just delete and re-add that type
 
-        table.setRowFactory(new Callback<TableView<Assignment>, TableRow<Assignment>>() {
+        table.setRowFactory(new Callback<TableView<Assignment>, TableRow<Assignment>>() { // Creates writes click context menus
             @Override
             public TableRow<Assignment> call(TableView<Assignment> tableView) {
                 final TableRow<Assignment> row = new TableRow<>();
@@ -126,9 +135,10 @@ public class CourseView extends BaseView {
                 final MenuItem removeMenuItem = new MenuItem("Remove Grade");
                 removeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
-                    public void handle(ActionEvent event) {
+                    public void handle(ActionEvent event) { // Easier to handle it here than a controller
                         table.getItems().remove(row.getItem());
                         course.getAverage();
+                        row.getItem().getType().remAss();
                         gradeSummary();
                     }
                 });
@@ -143,23 +153,30 @@ public class CourseView extends BaseView {
             }
         });
 
-
-
         table.getColumns().addAll(assignmentColumn, typeColumn, avgGradeColumn, letterGradeColumn);
+
+        // Generates a second borderpane to house the table and the form right below it
         BorderPane tablePane = new BorderPane();
         tablePane.setPadding(new Insets(10));
         tablePane.setCenter(table);
 
+        //
+        // Generets all the textfields and buttons
+        //
+        Text info = new Text("Use the form below to add individual assignments");
+        info.setFont(Font.font("Arial", 13));
+        info.setFill(Color.web("636363"));
         final TextField assignmentName = new TextField();
         assignmentName.setPromptText("Assignment");
         assignmentName.setMaxWidth(assignmentColumn.getPrefWidth());
         final ComboBox typeComboBox =  new ComboBox();
         typeComboBox.setItems(course.typeList);
         typeComboBox.setMaxWidth(typeColumn.getPrefWidth());
-        typeComboBox.setPromptText("Type");
+        typeComboBox.setPromptText("Select");
 
         final TextField grade = new TextField();
 
+        // Prevents non numerical inputs, unfortunately prevents decimals as well
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getText();
             if (text.matches("[0-9]*")) {
@@ -168,29 +185,33 @@ public class CourseView extends BaseView {
             return null;
         };
 
-        TextFormatter<String> textFormatter1 = new TextFormatter<>(filter);
-        grade.setTextFormatter(textFormatter1);
-
-
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        grade.setTextFormatter(textFormatter);
         grade.setMaxWidth(avgGradeColumn.getPrefWidth());
-        grade.setPromptText("Grade");
+        grade.setPromptText("% Grade");
 
-        final Button addButton = new Button("Add");
-        addButton.setOnAction( e -> this.controller.handleNewGradeAdded(e,this,this.course, assignmentName.getText(),(AssignmentType)typeComboBox.getSelectionModel().getSelectedItem(),Integer.parseInt(grade.getText())));
+        final Button addButton = new Button("Add Assignment");
+        addButton.setOnAction( e -> this.controller.handleNewGradeAdded(e,this,this.course, assignmentName,typeComboBox,grade));
+        VBox adder = new VBox();
         HBox hb = new HBox();
         hb.getChildren().addAll(assignmentName, typeComboBox, grade, addButton);
         hb.setSpacing(3);
-        tablePane.setBottom(hb);
+        adder.getChildren().addAll(info, hb);
+        adder.setSpacing(3);
+        tablePane.setBottom(adder);
 
         root.setCenter(tablePane);
 
+        //
+        // Generates all the buttons
+        //
         Button backButton = new Button("Back");
         backButton.setOnMousePressed( e -> this.controller.handleBackPress(e));
 
         Button editButton = new Button("Edit");
         editButton.setOnMousePressed( e -> this.controller.handleEditPress(e, this.course));
 
-        Button deleteButton = new Button("Delete");
+        Button deleteButton = new Button("Delete Course");
         deleteButton.setOnMousePressed( e -> this.controller.handleDeletePress(e, this.course));
 
         ButtonBar bbar = new ButtonBar();
@@ -199,7 +220,7 @@ public class CourseView extends BaseView {
         bbar.getButtons().addAll(backButton, editButton, deleteButton);
         root.setBottom(bbar);
 
-        Scene scene =  new Scene(root,  340, 600);
+        Scene scene =  new Scene(root,  400, 600);
         scene.getStylesheets().add("styles.css");
 
         return scene;

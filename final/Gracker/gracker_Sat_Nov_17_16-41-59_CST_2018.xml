@@ -162,15 +162,6 @@
   <property name="project.jdk.classpath" value="jdk.classpath.10"/>
   
   
-  <!-- Project Libraries -->
-  
-  <path id="library.jackson-all-1.7.3.classpath">
-    <pathelement location="${basedir}/../../../../../../../../../../Volumes/code/jackson-annotations-2.9.7.jar"/>
-    <pathelement location="${basedir}/../../../../../../../../../../Volumes/code/jackson-core-2.9.7.jar"/>
-    <pathelement location="${basedir}/../../../../../../../../../../Volumes/code/jackson-databind-2.9.7.jar"/>
-  </path>
-  
-  
   <!-- Global Libraries -->
   <!-- Register Custom Compiler Taskdefs -->
   <property name="javac2.home" value="${idea.home}/lib"/>
@@ -195,58 +186,9 @@
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.gracker, clean.artifact.gracker" description="cleanup all"/>
+  <target name="clean" depends="clean.module.gracker" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.gracker" description="build all modules"/>
   
-  <target name="init.artifacts">
-    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
-    <property name="artifact.output.gracker" value="${basedir}/../../../../../../../../Movies"/>
-    <mkdir dir="${artifacts.temp.dir}"/>
-    <property name="artifact.temp.output.Gracker" value="${artifacts.temp.dir}/Gracker.jar"/>
-    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.10}/lib/ant-javafx.jar"/>
-  </target>
-  
-  <target name="clean.artifact.gracker" description="clean Gracker artifact output">
-    <delete dir="${artifact.output.gracker}"/>
-  </target>
-  
-  <target name="artifact.gracker" depends="init.artifacts, compile.module.gracker" description="Build &#39;Gracker&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
-    <mkdir dir="${artifact.output.gracker}"/>
-    <copy todir="${artifact.temp.output.Gracker}">
-      <fileset dir="${gracker.output.dir}"/>
-    </copy>
-    <fx:fileset id="all_but_Gracker" dir="${artifact.temp.output.Gracker}" includes="**/*.jar">
-      <exclude name="Gracker.jar"/>
-    </fx:fileset>
-    <fx:fileset id="all_Gracker" dir="${artifact.temp.output.Gracker}" includes="**/*.jar"/>
-    <fx:application id="Gracker_id" name="Gracker" mainClass="null"/>
-    <fx:jar destfile="${artifact.temp.output.Gracker}/Gracker.jar">
-      <fx:application refid="Gracker_id"/>
-      <fileset dir="${artifact.temp.output.Gracker}" excludes="**/*.jar"/>
-      <fx:resources>
-        <fx:fileset refid="all_but_Gracker"/>
-      </fx:resources>
-    </fx:jar>
-    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.Gracker}/deploy" outfile="Gracker">
-      <fx:application refid="Gracker_id"/>
-      <fx:resources>
-        <fx:fileset refid="all_Gracker"/>
-      </fx:resources>
-    </fx:deploy>
-    <copy todir="${artifact.output.gracker}">
-      <fileset dir="${artifact.temp.output.Gracker}/deploy"/>
-    </copy>
-    <delete includeemptydirs="true">
-      <fileset dir="${artifact.temp.output.Gracker}"/>
-    </delete>
-  </target>
-  
-  <target name="build.all.artifacts" depends="artifact.gracker" description="Build all artifacts">
-    
-    <!-- Delete temporary files -->
-    <delete dir="${artifacts.temp.dir}"/>
-  </target>
-  
-  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+  <target name="all" depends="build.modules" description="build all"/>
 </project>
